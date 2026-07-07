@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KaagazPDF — India ka apna PDF toolkit | Free PDF tools, 100% private</title>
 <meta name="description" content="KaagazPDF — Merge, split, compress & convert PDFs right in your browser. Files never touch our servers. 10 free downloads daily, unlimited at just ₹299/month.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Cdefs%3E%3ClinearGradient%20id='g'%20x1='0'%20y1='0'%20x2='1'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='%233d3bf3'/%3E%3Cstop%20offset='.55'%20stop-color='%237a3bf3'/%3E%3Cstop%20offset='1'%20stop-color='%23ff8a1e'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='url(%23g)'/%3E%3Ctext%20x='32'%20y='45'%20font-size='34'%20text-anchor='middle'%3E%F0%9F%93%84%3C/text%3E%3C/svg%3E">
+<!-- Google AdSense (site verification + ads). Ad slots auto-hide for Pro users via CSS. -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9434243664235416" crossorigin="anonymous"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@600&display=swap" rel="stylesheet">
 <style>
@@ -168,6 +171,7 @@ footer a:hover{color:var(--saffron-soft)}
 .ad-sticky .close-ad{width:26px;height:26px;border-radius:50%;background:#f0f0fb;font-weight:800;color:var(--ink-soft)}
 .ad-sticky .upgrade-link{color:var(--indigo);font-weight:700;text-decoration:none;white-space:nowrap}
 body.pro .ad-slot,body.pro .ad-sticky{display:none}
+body.pro #goProNavBtn{display:none}
 
 /* ---------- quota pill ---------- */
 .quota-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--line);border-radius:100px;padding:7px 15px;font-size:.82rem;font-weight:700;color:var(--ink-soft);box-shadow:var(--shadow)}
@@ -257,6 +261,12 @@ body.pro .ad-slot,body.pro .ad-sticky{display:none}
 .done-wrap .save-note{font-size:.85rem;color:var(--ink-mute);margin-bottom:22px}
 .result-stat{display:inline-flex;gap:18px;background:#f0fbf7;border:1px solid #cceee2;border-radius:14px;padding:12px 22px;margin-bottom:20px;font-size:.88rem;font-weight:700;color:#0a8560}
 
+/* result preview */
+.preview-wrap{text-align:center;margin:2px 0 18px}
+.preview-wrap img{max-width:100%;max-height:280px;border-radius:14px;box-shadow:var(--shadow);background:repeating-conic-gradient(#ececf6 0% 25%,#fff 0% 50%) 0 0/18px 18px}
+.btn-compare{display:inline-flex;align-items:center;gap:7px;margin-top:10px;padding:9px 18px;border-radius:100px;background:#f0f0fb;font-weight:700;font-size:.8rem;color:var(--ink-soft);user-select:none;-webkit-user-select:none;touch-action:none}
+.btn-compare:active{background:#dcdcf5;color:var(--indigo)}
+
 /* confetti */
 .confetti{position:fixed;top:-12px;z-index:120;width:10px;height:14px;border-radius:3px;animation:confFall linear forwards;pointer-events:none}
 @keyframes confFall{to{transform:translateY(105vh) rotate(720deg);opacity:.4}}
@@ -333,7 +343,7 @@ body.pro .ad-slot,body.pro .ad-sticky{display:none}
         <span class="quota-bar"><span class="quota-fill" id="quotaFill" style="width:100%"></span></span>
       </span>
       <button class="btn btn-ghost" id="authNavBtn" onclick="onAuthNav()">Login</button>
-      <button class="btn btn-primary" onclick="openUpgrade()">👑 Go Pro — ₹299/mo</button>
+      <button class="btn btn-primary" id="goProNavBtn" onclick="openUpgrade()">👑 Go Pro — ₹299/mo</button>
     </div>
     <button class="hamb" id="hambBtn" aria-label="Menu">☰</button>
   </div>
@@ -525,6 +535,10 @@ body.pro .ad-slot,body.pro .ad-sticky{display:none}
         <div class="done-check"><svg viewBox="0 0 52 52"><path d="M14 27 L22 35 L38 18"/></svg></div>
         <h3>Ho gaya! Your file is ready 🎉</h3>
         <div id="resultStat"></div>
+        <div class="preview-wrap" id="previewWrap" style="display:none">
+          <img id="previewImg" alt="Result preview"><br>
+          <button class="btn-compare" id="compareBtn" type="button">👁 Hold to compare with original</button>
+        </div>
         <p class="save-note" id="doneNote"></p>
         <div class="modal-actions" style="margin-top:0">
           <button class="btn btn-ghost" onclick="resetTool()">↺ Start over</button>
@@ -830,6 +844,91 @@ async function makeZipSmart(entries){ /* like makeZip but with real deflate comp
   return new Blob([...parts, ...central, new Uint8Array(eocd.buffer)], {type:'application/zip'});
 }
 
+/* ---- AI background removal (U²-Net, runs 100% on-device) ----
+   Model file: put u2netp.onnx in a /models folder of your site repo.
+   Falls back to a public mirror, then to fast colour-fill if AI is
+   unavailable. Nothing is ever uploaded — inference runs in-browser. */
+let _ortLib = null, _u2Session = null;
+async function loadOrt(){
+  if(_ortLib) return _ortLib;
+  if(!window.ort){
+    await new Promise((res, rej)=>{
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.19.2/dist/ort.min.js';
+      s.onload = res; s.onerror = ()=>rej(new Error('AI engine failed to load'));
+      document.head.appendChild(s);
+    });
+  }
+  window.ort.env.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.19.2/dist/';
+  _ortLib = window.ort;
+  return _ortLib;
+}
+async function getU2Session(){
+  if(_u2Session) return _u2Session;
+  const ort = await loadOrt();
+  const sources = [
+    'models/u2netp.onnx',                                                          /* your own site (best) */
+    'u2netp.onnx',                                                                 /* also try site root */
+    'https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2netp.onnx'    /* public mirror */
+  ];
+  let buf = null;
+  for(const src of sources){
+    try{ const r = await fetch(src); if(r.ok){ buf = await r.arrayBuffer(); break; } }catch(e){}
+  }
+  if(!buf) throw new Error('AI model not available');
+  _u2Session = await ort.InferenceSession.create(buf, { executionProviders: ['wasm'] });
+  return _u2Session;
+}
+async function aiBackgroundMask(srcCanvas){
+  const ort = await loadOrt();
+  const session = await getU2Session();
+  const S = 320;
+  const c = document.createElement('canvas'); c.width = S; c.height = S;
+  const g = c.getContext('2d'); g.drawImage(srcCanvas, 0, 0, S, S);
+  const d = g.getImageData(0, 0, S, S).data;
+  const input = new Float32Array(3 * S * S);
+  const mean = [0.485, 0.456, 0.406], std = [0.229, 0.224, 0.225];
+  for(let i = 0; i < S * S; i++){
+    input[i]           = ((d[i*4]   / 255) - mean[0]) / std[0];
+    input[S*S + i]     = ((d[i*4+1] / 255) - mean[1]) / std[1];
+    input[2*S*S + i]   = ((d[i*4+2] / 255) - mean[2]) / std[2];
+  }
+  const feeds = {}; feeds[session.inputNames[0]] = new ort.Tensor('float32', input, [1, 3, S, S]);
+  const out = await session.run(feeds);
+  const pred = out[session.outputNames[0]].data;
+  let mi = Infinity, ma = -Infinity;
+  for(let i = 0; i < S * S; i++){ if(pred[i] < mi) mi = pred[i]; if(pred[i] > ma) ma = pred[i]; }
+  const range = (ma - mi) || 1;
+  const mc = document.createElement('canvas'); mc.width = S; mc.height = S;
+  const mg = mc.getContext('2d');
+  const mid = mg.createImageData(S, S);
+  for(let i = 0; i < S * S; i++){
+    const a = Math.max(0, Math.min(255, Math.round(255 * (pred[i] - mi) / range)));
+    mid.data[i*4] = 255; mid.data[i*4+1] = 255; mid.data[i*4+2] = 255; mid.data[i*4+3] = a;
+  }
+  mg.putImageData(mid, 0, 0);
+  /* upscale mask with smoothing = naturally feathered edges */
+  const fc = document.createElement('canvas'); fc.width = srcCanvas.width; fc.height = srcCanvas.height;
+  const fg = fc.getContext('2d');
+  fg.imageSmoothingEnabled = true; fg.imageSmoothingQuality = 'high';
+  fg.drawImage(mc, 0, 0, srcCanvas.width, srcCanvas.height);
+  return fc;
+}
+async function applyAIBackground(srcCanvas, targetRGB /* [r,g,b] or null=transparent */){
+  const mask = await aiBackgroundMask(srcCanvas);
+  const w = srcCanvas.width, h = srcCanvas.height;
+  const person = document.createElement('canvas'); person.width = w; person.height = h;
+  const pg = person.getContext('2d');
+  pg.drawImage(srcCanvas, 0, 0);
+  pg.globalCompositeOperation = 'destination-in';
+  pg.drawImage(mask, 0, 0);
+  const out = document.createElement('canvas'); out.width = w; out.height = h;
+  const og = out.getContext('2d');
+  if(targetRGB){ og.fillStyle = `rgb(${targetRGB[0]},${targetRGB[1]},${targetRGB[2]})`; og.fillRect(0, 0, w, h); }
+  og.drawImage(person, 0, 0);
+  return out;
+}
+
 /* ---- background replacement (Image Studio): flood-fill from the edges ---- */
 function replaceBackground(imgData, w, h, tol, target){
   const d = imgData.data, visited = new Uint8Array(w*h), stack = [];
@@ -1112,8 +1211,9 @@ function renderOpts(){
       const orig = btn.onclick;
       btn.onclick = ()=>{ if(!state.isPro){ openUpgrade('✨ Background change is a Pro feature — resize & compress stay free.'); return; } orig(); };
     });
-    area.appendChild(optRow('Background', bgSeg, 'Works best on photos with a plain background (passport-style)'));
-    area.appendChild(optRow('Background detection', segControl('tol',[{label:'Gentle',value:'low'},{label:'Normal',value:'med'},{label:'Strong',value:'high'}],'med')));
+    area.appendChild(optRow('Background', bgSeg, 'AI mode cleanly cuts out the person — great for passport photos'));
+    area.appendChild(optRow('Background engine', segControl('bgmode',[{label:'🪄 AI (best)',value:'ai'},{label:'Fast fill',value:'fast'}],'ai'),'AI runs on your device — photo is never uploaded. First use downloads a small 5 MB model.'));
+    area.appendChild(optRow('Fast-fill detection (only for Fast fill)', segControl('tol',[{label:'Gentle',value:'low'},{label:'Normal',value:'med'},{label:'Strong',value:'high'}],'med')));
   }
 }
 function rangeInput(name, min, max, def, suffix){
@@ -1397,8 +1497,8 @@ const ENGINES = {
       h = Math.max(1, Math.round(bmp.height*scalePct/100));
     }
     setProgress(20,'Resizing…');
-    const c = document.createElement('canvas'); c.width=w; c.height=h;
-    const g = c.getContext('2d');
+    let c = document.createElement('canvas'); c.width=w; c.height=h;
+    let g = c.getContext('2d');
     g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
     if(PRESETS[preset]){ /* cover-crop from centre so faces are not stretched */
       const sc = Math.max(w/bmp.width, h/bmp.height);
@@ -1410,13 +1510,29 @@ const ENGINES = {
     const bg = state.opts.bg || 'keep';
     if(bg !== 'keep' && !state.isPro) throw new Error('Background change is a Pro feature — resize & compress are free.');
     if(bg !== 'keep'){
-      setProgress(45,'Changing background…');
-      const tol = { low:32, med:55, high:85 }[state.opts.tol || 'med'];
-      const targets = { white:[255,255,255,255], blue:[74,134,232,255], red:[214,58,58,255], transparent:[0,0,0,0] };
-      const img = g.getImageData(0,0,w,h);
-      const changed = replaceBackground(img, w, h, tol, targets[bg]);
-      g.putImageData(img,0,0);
-      if(changed < w*h*0.02) toast('Background barely detected — try "Strong" detection or a plainer photo.', 'ℹ️');
+      const RGB = { white:[255,255,255], blue:[74,134,232], red:[214,58,58], transparent:null };
+      let aiOk = false;
+      if((state.opts.bgmode || 'ai') === 'ai'){
+        try{
+          setProgress(38,'AI detecting the person… (first use downloads a 5 MB model)');
+          c = await applyAIBackground(c, RGB[bg]);
+          g = c.getContext('2d');
+          aiOk = true;
+          setProgress(65,'AI background done ✓');
+        }catch(e){
+          console.warn('[KaagazPDF] AI background failed, using fast fill:', e);
+          toast('AI model unavailable right now — used fast colour fill instead.', 'ℹ️');
+        }
+      }
+      if(!aiOk){
+        setProgress(45,'Changing background (fast fill)…');
+        const tol = { low:32, med:55, high:85 }[state.opts.tol || 'med'];
+        const targets = { white:[255,255,255,255], blue:[74,134,232,255], red:[214,58,58,255], transparent:[0,0,0,0] };
+        const img = g.getImageData(0,0,w,h);
+        const changed = replaceBackground(img, w, h, tol, targets[bg]);
+        g.putImageData(img,0,0);
+        if(changed < w*h*0.02) toast('Background barely detected — try "Strong" detection or a plainer photo.', 'ℹ️');
+      }
     }
     setProgress(75,'Compressing…');
     const outPng = bg === 'transparent';
@@ -1448,6 +1564,19 @@ async function startProcess(){
     state.result = result;
     $('resultStat').innerHTML = result.stat ? `<div class="result-stat">📊 ${result.stat}</div>` : '';
     $('doneNote').textContent = `${result.name} · ${fmtSize(result.blob.size)} — processed on your device, nothing was uploaded.`;
+    /* image preview + hold-to-compare */
+    if(state._pvUrl){ URL.revokeObjectURL(state._pvUrl); state._pvUrl = null; }
+    if(state._origUrl){ URL.revokeObjectURL(state._origUrl); state._origUrl = null; }
+    if(result.blob.type && result.blob.type.startsWith('image/')){
+      state._pvUrl = URL.createObjectURL(result.blob);
+      $('previewImg').src = state._pvUrl;
+      const f = state.files[0];
+      if(f && /\.(jpe?g|png)$/i.test(f.name)){
+        state._origUrl = URL.createObjectURL(new Blob([f.bytes]));
+        $('compareBtn').style.display = '';
+      } else $('compareBtn').style.display = 'none';
+      $('previewWrap').style.display = '';
+    } else $('previewWrap').style.display = 'none';
     setStep(3);
     confetti();
   }catch(err){
@@ -1674,6 +1803,16 @@ async function refreshPlan(){
 $('hambBtn').onclick = ()=>$('navLinks').classList.toggle('open');
 document.querySelectorAll('.nav-links a').forEach(a=>a.onclick=()=>$('navLinks').classList.remove('open'));
 [$('toolOverlay'),$('upOverlay'),$('authOverlay'),$('acctOverlay')].forEach(ov=>ov.addEventListener('click',e=>{ if(e.target===ov){ ov.classList.remove('open'); document.body.style.overflow=''; }}));
+
+/* hold-to-compare on the result preview */
+(function(){
+  const cb = $('compareBtn');
+  if(!cb) return;
+  const showOrig = e => { e.preventDefault(); if(state._origUrl) $('previewImg').src = state._origUrl; };
+  const showRes  = () => { if(state._pvUrl) $('previewImg').src = state._pvUrl; };
+  ['mousedown','touchstart'].forEach(ev=>cb.addEventListener(ev, showOrig, {passive:false}));
+  ['mouseup','mouseleave','touchend','touchcancel'].forEach(ev=>cb.addEventListener(ev, showRes));
+})();
 
 /* reveal on scroll */
 const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('show'); io.unobserve(e.target);} }),{threshold:.12});
