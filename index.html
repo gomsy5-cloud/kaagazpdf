@@ -596,6 +596,11 @@ body.pro #goProNavBtn{display:none}
       <button id="tabSignup" class="on" onclick="setAuthMode('signup')">Sign up</button>
       <button id="tabLogin" onclick="setAuthMode('login')">Login</button>
     </div>
+    <button type="button" id="googleBtn" class="btn btn-ghost btn-block" style="display:none;gap:10px;margin-bottom:14px" onclick="googleAuth()">
+      <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.1 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.1 29.6 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.5 0 10.5-2.1 14.3-5.5l-6.6-5.6C29.6 34.5 26.9 35.5 24 35.5c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.6 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.2 4.2-4.1 5.5l6.6 5.6C41.9 36 44 30.6 44 24c0-1.3-.1-2.3-.4-3.5z"/></svg>
+      Continue with Google
+    </button>
+    <div id="googleDivider" style="display:none;text-align:center;color:var(--ink-mute);font-size:.8rem;margin-bottom:12px">— or with email —</div>
     <div class="auth-err" id="authErr"></div>
     <form class="auth-form" id="authForm" novalidate>
       <div class="fld" id="fldName">
@@ -666,7 +671,8 @@ body.pro #goProNavBtn{display:none}
 const CONFIG = Object.assign({
   SUPABASE_URL: 'https://ftufjkcmevmeeqygvwgy.supabase.co',          // e.g. 'https://abcdefgh.supabase.co'
   SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0dWZqa2NtZXZtZWVxeWd2d2d5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMzMzA5NjMsImV4cCI6MjA5ODkwNjk2M30.asxt-PWxHWMX2KYY_LFzB7Fhc5docDt8V3LMHrBUBSY',     // long key starting with 'eyJ...'
-  RAZORPAY_PAYMENT_LINK: 'https://rzp.io/rzp/bHS5uxT'  // e.g. 'https://razorpay.me/@yourname' or 'https://rzp.io/rzp/xxxx'
+  RAZORPAY_PAYMENT_LINK: 'https://rzp.io/rzp/bHS5uxT',  // e.g. 'https://razorpay.me/@yourname' or 'https://rzp.io/rzp/xxxx'
+  GOOGLE_AUTH: true   // show "Continue with Google" — needs Google enabled in Supabase → Authentication → Providers
 }, window.KAAGAZ_CONFIG || {});
 const LIVE = !!(CONFIG.SUPABASE_URL && CONFIG.SUPABASE_ANON_KEY);
 
@@ -1188,7 +1194,7 @@ function renderOpts(){
     area.appendChild(optRow('Rotation', segControl('angle',[{label:'90° ↻',value:90},{label:'180°',value:180},{label:'270° ↺',value:270}],90)));
   }
   if(t==='compress'){
-    area.appendChild(optRow('Compression level', segControl('level',[{label:'Recommended',value:'rec'},{label:'Extreme (image mode)',value:'ext'}],'rec'),'Extreme re-renders pages as images — smallest size, text not selectable'));
+    area.appendChild(optRow('Compression level', segControl('level',[{label:'Recommended (keep text)',value:'rec'},{label:'Extreme (biggest shrink)',value:'ext'}],'rec'),'Recommended keeps selectable text and never makes the file bigger. Extreme flattens pages to images for the smallest size — best for scanned/photo PDFs.'));
   }
   if(t==='remove'){
     area.appendChild(optRow('Pages to remove', textInput('range','e.g. 2, 5-7')));
@@ -1439,34 +1445,61 @@ const ENGINES = {
   },
 
   async compress(files){
+    // Build several candidates and ALWAYS keep the smallest — never bigger than the original.
     const compressOne = async (file)=>{
       const before = file.size;
+      const orig = new Uint8Array(file.bytes);
+      const candidates = [{ bytes: orig, text: true }];   // original is always a fallback
+      // 1) structural re-save (keeps selectable text)
+      try{
+        const src = await PDFDocument.load(file.bytes,{ignoreEncryption:true});
+        src.setProducer('KaagazPDF'); src.setCreator('KaagazPDF');
+        const b = await src.save({useObjectStreams:true});
+        candidates.push({ bytes:b, text:true });
+      }catch(e){ console.warn('[KaagazPDF] structural compress skipped', e); }
+      // 2) raster/downsample (Extreme mode) — flattens pages to right-sized JPEGs.
+      //    Uses a pixel cap on the long edge so big scanned pages are DOWNsampled
+      //    (a fixed scale would upscale large-page scans and never shrink them).
+      let rasterFailed = false;
       if(state.opts.level==='ext'){
-        const pdfjs = await getPdfjs();
-        const pdf = await pdfjs.getDocument({data:file.bytes.slice(0)}).promise;
-        const out = await PDFDocument.create();
-        for(let i=1;i<=pdf.numPages;i++){
-          const page = await pdf.getPage(i);
-          const vp = page.getViewport({scale:1.5});
-          const c = document.createElement('canvas'); c.width=vp.width; c.height=vp.height;
-          await page.render({canvasContext:c.getContext('2d'), viewport:vp}).promise;
-          const jpgBytes = await (await fetch(c.toDataURL('image/jpeg',0.62))).arrayBuffer();
-          const img = await out.embedJpg(jpgBytes);
-          const pg = out.addPage([vp.width, vp.height]);
-          pg.drawImage(img,{x:0,y:0,width:vp.width,height:vp.height});
-        }
-        const bytes = await out.save({useObjectStreams:true});
-        return { bytes, before };
+        try{
+          const q = 0.5, targetLongPx = 1500;   // ≈ screen/print-lite quality
+          const pdfjs = await getPdfjs();
+          const pdf = await pdfjs.getDocument({data:orig.slice(0)}).promise;
+          const out = await PDFDocument.create();
+          for(let i=1;i<=pdf.numPages;i++){
+            const page = await pdf.getPage(i);
+            const base = page.getViewport({scale:1});
+            const longEdge = Math.max(base.width, base.height) || 1;
+            const scale = Math.min(2, targetLongPx/longEdge);   // never upscale past 2×; cap output pixels
+            const vp = page.getViewport({scale});
+            const c = document.createElement('canvas'); c.width=Math.max(1,Math.round(vp.width)); c.height=Math.max(1,Math.round(vp.height));
+            const ctx = c.getContext('2d'); ctx.fillStyle='#fff'; ctx.fillRect(0,0,c.width,c.height);
+            await page.render({canvasContext:ctx, viewport:vp}).promise;
+            const jpgBytes = await (await fetch(c.toDataURL('image/jpeg',q))).arrayBuffer();
+            const img = await out.embedJpg(jpgBytes);
+            const pg = out.addPage([c.width, c.height]);
+            pg.drawImage(img,{x:0,y:0,width:c.width,height:c.height});
+          }
+          const b = await out.save({useObjectStreams:true});
+          candidates.push({ bytes:b, text:false });
+        }catch(e){ console.warn('[KaagazPDF] raster compress failed', e); rasterFailed = true; }
       }
-      const src = await PDFDocument.load(file.bytes,{ignoreEncryption:true});
-      src.setProducer('KaagazPDF'); src.setCreator('KaagazPDF');
-      const bytes = await src.save({useObjectStreams:true});
-      return { bytes, before };
+      file._rasterFailed = rasterFailed;
+      candidates.sort((a,b)=>a.bytes.byteLength - b.bytes.byteLength);
+      const best = candidates[0];
+      return { bytes: best.bytes, before, gained: best.bytes.byteLength < before, isOriginal: best.bytes===orig, rasterFailed: file._rasterFailed };
+    };
+    const statFor = (before, after, isOriginal)=>{
+      if(isOriginal || after>=before) return `Already optimised — kept at ${fmtSize(before)} (no gain possible without quality loss; try Extreme mode)`;
+      return `${fmtSize(before)} → ${fmtSize(after)} (${Math.round((1-after/before)*100)}% smaller)`;
     };
     if(files.length===1){
       setProgress(30, state.opts.level==='ext'?'Re-rendering pages…':'Optimising…');
-      const { bytes, before } = await compressOne(files[0]);
-      return { blob:new Blob([bytes],{type:'application/pdf'}), name:'kaagaz-compressed.pdf', stat:`${fmtSize(before)} → ${fmtSize(bytes.byteLength)}` };
+      const { bytes, before, isOriginal, rasterFailed } = await compressOne(files[0]);
+      if(rasterFailed) toast('The page renderer could not load, so extreme shrink was skipped. Check your connection and retry.', '⚠️');
+      else if(isOriginal && state.opts.level==='ext') toast('This PDF is already well-compressed — kept at original size (no quality loss).', 'ℹ️');
+      return { blob:new Blob([bytes],{type:'application/pdf'}), name:'kaagaz-compressed.pdf', stat:statFor(before, bytes.byteLength, isOriginal) };
     }
     // batch: compress each, zip results
     const entries=[]; let totBefore=0, totAfter=0;
@@ -1477,7 +1510,7 @@ const ENGINES = {
       entries.push({ name:(files[i].name.replace(/\.pdf$/i,'')||'file')+'-compressed.pdf', data:bytes });
     }
     setProgress(94,'Zipping…');
-    return { blob:makeZip(entries), name:'kaagaz-compressed-batch.zip', stat:`${files.length} PDFs · ${fmtSize(totBefore)} → ${fmtSize(totAfter)}` };
+    return { blob:makeZip(entries), name:'kaagaz-compressed-batch.zip', stat:`${files.length} PDFs · ${fmtSize(totBefore)} → ${fmtSize(totAfter)} (${Math.max(0,Math.round((1-totAfter/totBefore)*100))}% smaller)` };
   },
 
   async rotate(files){
@@ -2008,9 +2041,30 @@ function openAuth(mode='signup', next=null, subText){
   setAuthMode(mode);
   if(subText) $('authSub').textContent = subText;
   $('authErr').style.display = 'none';
+  const showG = !!CONFIG.GOOGLE_AUTH;
+  $('googleBtn').style.display = showG ? 'inline-flex' : 'none';
+  $('googleDivider').style.display = showG ? 'block' : 'none';
   $('authOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
   setTimeout(()=>$(mode==='signup'?'auName':'auEmail').focus(), 250);
+}
+async function googleAuth(){
+  if(LIVE){
+    try{
+      const sb = await getSB();
+      const { error } = await sb.auth.signInWithOAuth({ provider:'google', options:{ redirectTo: location.origin } });
+      if(error) throw error;
+      // Supabase redirects to Google; on return, loadProfile() at startup restores the session.
+    }catch(e){
+      authFail('Google sign-in is not switched on yet. Please use email for now (owner: enable Google in Supabase → Authentication → Providers).');
+    }
+  } else {
+    state.user = { id:'google-demo', name:'Google User', email:'google.user@gmail.com', plan:'free' };
+    state.isPro = false; updateAuthUI();
+    const next = afterAuth; afterAuth = null; closeAuth();
+    toast('Signed in with Google (demo mode) ✅','✅');
+    if(next) next();
+  }
 }
 function closeAuth(){ $('authOverlay').classList.remove('open'); if(!$('upOverlay').classList.contains('open')) document.body.style.overflow=''; afterAuth = null; }
 function setAuthMode(mode){
@@ -2162,7 +2216,8 @@ function startPayment(method){
     if(!state.user){ closeUpgrade(); openUpgrade(); return; }
     window.open(CONFIG.RAZORPAY_PAYMENT_LINK, '_blank');
     $('paidCheckWrap').style.display = '';
-    toast('Complete the ₹299 payment in the new tab, then come back here.', '💳');
+    $('payNote').innerHTML = `⚠️ Pay using your account email <b>${state.user.email}</b> so Pro activates automatically. Then tap "I've paid" below.`;
+    toast('Use your account email at checkout: '+state.user.email, '💳');
     return;
   }
   fakePay(method || 'UPI');
