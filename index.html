@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KaagazPDF — India ka apna PDF toolkit | Free PDF tools, 100% private</title>
-<meta name="description" content="KaagazPDF — 21 free PDF & image tools right in your browser. Merge, split, compress, OCR, sign, convert. Files never touch our servers. 5 free downloads daily, unlimited at ₹299/month.">
+<meta name="description" content="KaagazPDF — 27 free PDF & image tools right in your browser. Aadhaar masking, self-attest, exam photo resize, OCR, merge, compress, sign & more. Files never touch our servers. 5 free downloads daily, unlimited at ₹299/month.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Cdefs%3E%3ClinearGradient%20id='g'%20x1='0'%20y1='0'%20x2='1'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='%233d3bf3'/%3E%3Cstop%20offset='.55'%20stop-color='%237a3bf3'/%3E%3Cstop%20offset='1'%20stop-color='%23ff8a1e'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='url(%23g)'/%3E%3Ctext%20x='32'%20y='45'%20font-size='34'%20text-anchor='middle'%3E%F0%9F%93%84%3C/text%3E%3C/svg%3E">
 <!-- Google AdSense (site verification + ads). Ad slots auto-hide for Pro users via CSS. -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9434243664235416" crossorigin="anonymous"></script>
@@ -291,6 +291,39 @@ body.pro #goProNavBtn{display:none}
 /* pro tool badge */
 .tool-pro{position:absolute;top:16px;right:16px;background:linear-gradient(120deg,#3d3bf3,#7a3bf3);color:#fff;font-size:.6rem;font-weight:800;letter-spacing:.08em;padding:5px 11px;border-radius:100px;z-index:1;box-shadow:0 5px 12px rgba(61,59,243,.4)}
 
+/* ---------- NEW India-first tools: highlight + badge ---------- */
+.tool-card.is-new{border-color:transparent;background:linear-gradient(#fff,#fff) padding-box,linear-gradient(120deg,#3d3bf3,#7a3bf3 55%,#ff8a1e) border-box;border:1.6px solid transparent;box-shadow:0 10px 34px rgba(61,59,243,.14)}
+.tool-card.is-new::before{content:"";position:absolute;inset:0;border-radius:var(--radius);background:radial-gradient(120px 90px at 85% 0%,#ff8a1e22,transparent 70%);opacity:.9;z-index:0;pointer-events:none}
+.tool-card.is-new:hover{box-shadow:0 26px 60px rgba(61,59,243,.26)}
+.tool-new-badge{position:absolute;top:16px;left:16px;z-index:2;background:linear-gradient(120deg,#ff8a1e,#ff5da2);color:#fff;font-size:.6rem;font-weight:800;letter-spacing:.1em;padding:5px 11px;border-radius:100px;box-shadow:0 6px 14px rgba(255,93,162,.45);animation:newPulse 2.4s ease-in-out infinite}
+@keyframes newPulse{0%,100%{transform:translateY(0);box-shadow:0 6px 14px rgba(255,93,162,.45)}50%{transform:translateY(-2px);box-shadow:0 10px 22px rgba(255,138,30,.6)}}
+.tool-card.is-new .tool-icon{box-shadow:0 8px 20px rgba(61,59,243,.18)}
+.tool-card.is-new:hover .tool-icon{transform:scale(1.16) rotate(-6deg)}
+/* "how to use" learning hint that slides up on hover — for EVERY tool */
+.tool-hoverhint{position:absolute;left:0;right:0;bottom:0;z-index:3;background:linear-gradient(120deg,#141433,#2a2870);color:#fff;font-size:.75rem;font-weight:600;line-height:1.45;padding:11px 15px 13px;border-radius:0 0 var(--radius) var(--radius);opacity:0;transform:translateY(100%);transition:opacity .28s ease,transform .34s cubic-bezier(.2,.9,.3,1.25);pointer-events:none}
+.tool-hoverhint b{display:flex;align-items:center;gap:6px;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#ffcf9e;margin-bottom:4px;font-weight:800}
+.tool-hoverhint b .bulb{display:inline-block;animation:bulbPop 1.6s ease-in-out infinite}
+@keyframes bulbPop{0%,100%{transform:scale(1)}50%{transform:scale(1.25) rotate(-8deg)}}
+.tool-card:hover .tool-hoverhint{opacity:1;transform:translateY(0)}
+@media(hover:none){.tool-hoverhint{display:none}}
+
+/* ---------- in-tool explainer panel (shown after you open a new tool) ---------- */
+.tool-explainer{background:linear-gradient(120deg,#f4f4ff,#fef3ec);border:1px solid #e4e4fb;border-radius:16px;padding:16px 18px;margin-bottom:6px;animation:fadeUp .4s ease both}
+.tool-explainer .te-head{display:flex;align-items:center;gap:9px;font-weight:800;font-size:.98rem;margin-bottom:8px;color:var(--ink)}
+.tool-explainer .te-head .te-tag{background:linear-gradient(120deg,#ff8a1e,#ff5da2);color:#fff;font-size:.56rem;font-weight:800;letter-spacing:.1em;padding:3px 8px;border-radius:100px}
+.tool-explainer ul{list-style:none;display:grid;gap:7px}
+.tool-explainer li{display:flex;gap:9px;align-items:flex-start;font-size:.85rem;color:var(--ink-soft);line-height:1.45}
+.tool-explainer li .ic{flex:none;width:20px;height:20px;border-radius:6px;background:#fff;display:grid;place-items:center;font-size:.72rem;box-shadow:0 2px 6px rgba(35,32,120,.12)}
+.tool-explainer .te-priv{margin-top:10px;font-size:.76rem;font-weight:700;color:#0a8560;display:flex;align-items:center;gap:6px}
+
+/* auto-detect / mask helper buttons */
+.mask-actions{display:flex;gap:10px;flex-wrap:wrap;margin:4px 0 2px}
+.mask-btn{display:inline-flex;align-items:center;gap:7px;padding:11px 16px;border-radius:12px;font-weight:700;font-size:.86rem;border:1.5px solid var(--line);background:#fff;color:var(--ink);transition:.2s}
+.mask-btn.primary{background:var(--grad);color:#fff;border-color:transparent;box-shadow:0 8px 20px rgba(61,59,243,.3)}
+.mask-btn:hover{transform:translateY(-2px)}
+.mask-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.mask-status{font-size:.8rem;font-weight:600;color:var(--ink-mute);margin-top:2px;min-height:1.2em}
+
 /* auth + account */
 #authNavBtn.chip-mode{border-color:transparent;background:#f0f0fb;padding:7px 16px 7px 8px;gap:9px}
 .avatar{width:30px;height:30px;border-radius:50%;background:var(--grad);color:#fff;display:inline-grid;place-items:center;font-size:.82rem;font-weight:800}
@@ -358,13 +391,13 @@ body.pro #goProNavBtn{display:none}
 
   <span class="chip"><span class="dot"></span> 100% in-browser · Files never leave your device</span>
   <h1>Every PDF tool India needs.<br><span class="grad">Ek hi jagah pe.</span></h1>
-  <p class="sub">21 PDF & image tools, right inside your browser. No uploads, no waiting, no <i>tension</i>. 5 free downloads every day, unlimited at just ₹299/month.</p>
+  <p class="sub">27 PDF & image tools, right inside your browser — including Aadhaar masking, self-attest & exam photo resize. No uploads, no waiting, no <i>tension</i>. 5 free downloads every day, unlimited at just ₹299/month.</p>
   <div class="hero-cta">
     <a href="#tools" class="btn btn-primary btn-xl">🚀 Start free — 5 downloads/day</a>
     <a href="#pricing" class="btn btn-ghost btn-xl">See pricing</a>
   </div>
   <div class="hero-stats">
-    <div class="hstat"><b data-count="21">0</b><span>Powerful tools</span></div>
+    <div class="hstat"><b data-count="27">0</b><span>Powerful tools</span></div>
     <div class="hstat"><b><span data-count="100">0</span>%</b><span>Browser-side processing</span></div>
     <div class="hstat"><b>₹<span data-count="299">0</span></b><span>Unlimited / month</span></div>
     <div class="hstat"><b><span data-count="0">0</span></b><span>Docs stored on servers</span></div>
@@ -653,6 +686,33 @@ body.pro #goProNavBtn{display:none}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <script>
+/* Compatibility polyfill: pdf.js 4.x calls Math.sumPrecise, which older
+   browsers (common on Android) don't have yet. Keeps all PDF tools working. */
+if (typeof Math.sumPrecise !== 'function') {
+  Math.sumPrecise = function (values) {
+    let sum = 0, c = 0;                       // Neumaier compensated summation
+    for (const v of values) {
+      const n = Number(v), t = sum + n;
+      c += (Math.abs(sum) >= Math.abs(n)) ? (sum - t) + n : (n - t) + sum;
+      sum = t;
+    }
+    return sum + c;
+  };
+}
+[Map, WeakMap].forEach(function (M) {
+  if (M && M.prototype && typeof M.prototype.getOrInsertComputed !== 'function') {
+    M.prototype.getOrInsertComputed = function (key, cb) {
+      if (this.has(key)) return this.get(key);
+      const v = cb(key); this.set(key, v); return v;
+    };
+  }
+  if (M && M.prototype && typeof M.prototype.getOrInsert !== 'function') {
+    M.prototype.getOrInsert = function (key, def) {
+      if (this.has(key)) return this.get(key);
+      this.set(key, def); return def;
+    };
+  }
+});
 /* =====================================================================
    KaagazPDF — all processing happens in this browser tab.
    No document is ever transmitted to a server. Session memory is
@@ -986,6 +1046,12 @@ const USERS = {};
 
 /* ---------------- tools config ---------------- */
 const TOOLS = [
+  { id:'aadhaarmask', icon:'🆔', bg:'#eaf2ff', name:'Aadhaar Number Masking', desc:'Auto-hide the first 8 digits of your Aadhaar (UIDAI-style masked copy) before sharing.', accept:'image/*,application/pdf', multiple:false, dynamicOpts:true, isNew:true, hint:'Banks & KYC accept a masked Aadhaar. We find the number on your device and black out the first 8 digits — nothing is uploaded.' },
+  { id:'piiredact', icon:'🕵️', bg:'#eef0f3', name:'Auto-Hide Personal Info', desc:'Automatically finds Aadhaar, PAN, phone & account numbers and blacks them out.', accept:'image/*,application/pdf', multiple:false, dynamicOpts:true, isNew:true, hint:'One tap scans the page on your device and covers every sensitive number it finds — safe to share.' },
+  { id:'selfattest', icon:'🖊️', bg:'#eafaf0', name:'Self-Attest Stamp', desc:'Add "Self Attested", today’s date & your signature to every page in one click.', accept:'image/*,application/pdf', multiple:false, dynamicOpts:true, isNew:true, hint:'Every govt / college / bank form asks for self-attested copies. Stamp all pages at once — no printer needed.' },
+  { id:'sharewatermark', icon:'🛡️', bg:'#e3f2ff', name:'Share-Safe Watermark', desc:'Stamp "Only for SBI KYC · date" across a copy so it can never be misused.', accept:'image/*,application/pdf', multiple:false, isNew:true, hint:'Protect your Aadhaar/PAN copy: a light diagonal stamp makes a leaked copy useless and traceable.' },
+  { id:'exampreset', icon:'🎓', bg:'#fff3dc', name:'Exam Photo & Sign Resizer', desc:'Exact size + KB for SSC, UPSC, IBPS, NEET, JEE & RRB forms — ready to upload.', accept:'image/*', multiple:false, isNew:true, hint:'Pick your exam, we set the exact pixels and squeeze to the KB limit the form wants. No more upload errors.' },
+  { id:'eaadhaar', icon:'🔓', bg:'#fff0e8', name:'Open e-Aadhaar PDF', desc:'Remove the password from your UIDAI e-Aadhaar PDF, with a helper that builds the password for you.', accept:'application/pdf', multiple:false, dynamicOpts:true, isNew:true, hint:'Forgot the e-Aadhaar password format? We build it from your name + birth year and give you an open copy.' },
   { id:'merge', icon:'🧩', bg:'#ffe9e3', name:'Merge PDF', desc:'Combine many PDFs into one, in your chosen order.', accept:'application/pdf', multiple:true, min:2 },
   { id:'split', icon:'✂️', bg:'#e7f0ff', name:'Split PDF', desc:'Extract a page range or split every page into separate files.', accept:'application/pdf', multiple:false },
   { id:'compress', icon:'🗜️', bg:'#e5f7f0', name:'Compress PDF', desc:'Shrink one or many PDFs for email & WhatsApp. Batch supported.', accept:'application/pdf', multiple:true, min:1 },
@@ -1009,13 +1075,48 @@ const TOOLS = [
   { id:'enhance', icon:'✨', bg:'#fef3e8', name:'Image Enhancer', desc:'Upscale low-quality photos to high resolution with sharpening. Batch supported.', accept:'image/*', multiple:true, min:1, pro:true },
 ];
 
+/* short "how to use" lines shown on hover so users learn each tool at a glance */
+const USE_HINTS = {
+  aadhaarmask:'Add your Aadhaar → tap Auto-detect → download the masked copy.',
+  piiredact:'Add the file → tap Auto-detect → sensitive numbers get blacked out.',
+  selfattest:'Add file → type name & date, draw signature → stamps every page.',
+  sharewatermark:'Add file → type where it’s for (e.g. SBI KYC) → light stamp all over.',
+  exampreset:'Pick your exam + photo/signature → get the exact size & KB.',
+  eaadhaar:'Add the locked PDF → build the password → get an open copy.',
+  merge:'Drop 2+ PDFs, drag to set the order, then Merge into one file.',
+  split:'Give a range like “1-3, 5” — or split every page into its own PDF.',
+  compress:'Drop one or many PDFs — we shrink them for email & WhatsApp.',
+  rotate:'Fix sideways scans — rotate every page 90°, 180° or 270°.',
+  pdf2jpg:'Turns each PDF page into a sharp JPG you can share or print.',
+  jpg2pdf:'Pick several photos, drag to order, get one clean PDF.',
+  remove:'Type pages to delete like “2, 5-7” — the rest stays intact.',
+  extract:'Keep only the pages you need — type a range and go.',
+  watermark:'Type your text — it’s stamped diagonally across every page.',
+  pagenum:'Adds neat “1 / N” page numbers at the bottom of each page.',
+  docxsqueeze:'Shrinks heavy Word/PPT by optimising images inside — text untouched.',
+  imgstudio:'Resize to passport/exam size or compress; change background with Pro.',
+  ocr:'Reads text from scans (Eng/Hindi/Bengali) → searchable PDF, Word or text.',
+  sign:'Draw or type your signature, then place it on any page.',
+  pdf2word:'Pulls the text into an editable Word file (OCR option for scans).',
+  unlock:'Removes copy/print restrictions so you can edit freely.',
+  organize:'See page thumbnails — reorder, rotate or delete, then save.',
+  redact:'Drag black boxes over private info — it’s flattened permanently.',
+  photosheet:'Turns one photo into a printable sheet of passport copies (Pro).',
+  pdf2long:'Stacks all pages into one tall image — easy to share on chat.',
+  enhance:'Upscales blurry photos to high-res with sharpening (Pro).'
+};
+
 /* ---------------- render tools grid ---------------- */
 const grid = document.getElementById('toolsGrid');
 TOOLS.forEach((t,i)=>{
   const b = document.createElement('button');
-  b.className = 'tool-card reveal';
+  b.className = 'tool-card reveal' + (t.isNew ? ' is-new' : '');
   b.style.transitionDelay = (i%4)*0.06+'s';
-  b.innerHTML = `${t.pro ? '<span class="tool-pro">👑 PRO</span>' : (t.proFeature ? '<span class="tool-pro" style="background:#f0f0fb;color:#3d3bf3;box-shadow:none">FREE + 👑</span>' : '<span class="go">→</span>')}<span class="tool-icon" style="background:${t.bg}">${t.icon}</span><h3>${t.name}</h3><p>${t.desc}</p>`;
+  const newBadge = t.isNew ? '<span class="tool-new-badge">✦ NEW</span>' : '';
+  const topRight = t.pro ? '<span class="tool-pro">👑 PRO</span>' : (t.proFeature ? '<span class="tool-pro" style="background:#f0f0fb;color:#3d3bf3;box-shadow:none">FREE + 👑</span>' : '<span class="go">→</span>');
+  const hintText = USE_HINTS[t.id] || t.hint || '';
+  const hoverHint = hintText ? `<span class="tool-hoverhint"><b><span class="bulb">💡</span> How to use</b>${hintText}</span>` : '';
+  b.innerHTML = `${newBadge}${topRight}<span class="tool-icon" style="background:${t.bg}">${t.icon}</span><h3>${t.name}</h3><p>${t.desc}</p>${hoverHint}`;
   b.onclick = ()=>openTool(t.id);
   grid.appendChild(b);
 });
@@ -1185,9 +1286,18 @@ function textInput(name, placeholder, def=''){
   const i = document.createElement('input'); i.type='text'; i.placeholder=placeholder; i.value=def;
   state.opts[name]=def; i.oninput = ()=>state.opts[name]=i.value; return i;
 }
+const NEW_EXPLAIN = {
+  aadhaarmask:{title:'Aadhaar Number Masking', points:[['🔍','Tap “Auto-detect” — we read the page on your device and cover the first 8 digits of your Aadhaar.'],['✍️','Not detected? Just drag across the numbers to black them out by hand.'],['⬇️','Download a UIDAI-style masked copy that banks & KYC accept.']], priv:'Your Aadhaar is never uploaded — masking happens inside your browser.'},
+  piiredact:{title:'Auto-Hide Personal Info', points:[['🕵️','One tap finds Aadhaar, PAN, phone & long account numbers and blacks them out.'],['✍️','Add or remove boxes by hand for anything extra.'],['🛡️','Do this before sharing a document on WhatsApp or email.']], priv:'Detection runs on your device — the file never leaves it.'},
+  selfattest:{title:'Self-Attest Stamp', points:[['🖊️','Adds “Self Attested” + today’s date to every page in one click.'],['✒️','Optionally draw your signature to stamp it too.'],['📄','Perfect for govt, college & bank form copies — no printer needed.']]},
+  sharewatermark:{title:'Share-Safe Watermark', points:[['🛡️','Stamps “Only for … · date” lightly across the whole document.'],['🔗','A leaked copy becomes useless and traceable to where you sent it.'],['🪪','Made for the Aadhaar / PAN / cheque copies you must submit somewhere.']]},
+  exampreset:{title:'Exam Photo & Sign Resizer', points:[['🎓','Pick your exam — we set the exact pixels and squeeze to its KB limit.'],['🖼️','Works for both photo and signature.'],['✅','Upload without the “file too large / wrong size” error.']], priv:'Always cross-check the size with your official exam notification.'},
+  eaadhaar:{title:'Open e-Aadhaar PDF', points:[['🔑','Forgot the format? We build the password from your name + birth year.'],['🔓','Removes the lock so you can open, print & share freely.'],['📵','The PDF and its password stay on your device.']]}
+};
 function renderOpts(){
   const area = $('optsArea'); area.innerHTML='';
   const t = state.tool.id;
+  if(NEW_EXPLAIN[t]) area.appendChild(toolExplainer(NEW_EXPLAIN[t]));
   if(t==='split'){
     area.appendChild(optRow('Split mode', segControl('mode',[{label:'Extract range',value:'range'},{label:'Every page separately',value:'all'}],'range')));
     area.appendChild(optRow('Page range', textInput('range','e.g. 1-3, 5'), 'Used only in "Extract range" mode'));
@@ -1260,6 +1370,19 @@ function renderOpts(){
     area.appendChild(optRow('Background', bgSeg, 'AI mode cleanly cuts out the person — great for passport photos'));
     area.appendChild(optRow('Background engine', segControl('bgmode',[{label:'🪄 AI (best)',value:'ai'},{label:'Fast fill',value:'fast'}],'ai'),'AI runs on your device — photo is never uploaded. First use downloads a small 5 MB model.'));
     area.appendChild(optRow('Fast-fill detection (only for Fast fill)', segControl('tol',[{label:'Gentle',value:'low'},{label:'Normal',value:'med'},{label:'Strong',value:'high'}],'med')));
+  }
+  if(t==='aadhaarmask'){ buildMaskUI(area,'aadhaar'); }
+  if(t==='piiredact'){ buildMaskUI(area,'pii'); }
+  if(t==='selfattest'){ buildSelfAttestUI(area); }
+  if(t==='eaadhaar'){ buildEaadhaarUI(area); }
+  if(t==='sharewatermark'){
+    area.appendChild(optRow('This copy is only for…', textInput('wmpurpose','e.g. SBI KYC / Passport / College admission', state.opts.wmpurpose||''),'Printed across the page so it cannot be reused elsewhere'));
+    area.appendChild(optRow('Add today’s date', segControl('wmdate',[{label:'Yes',value:'on'},{label:'No',value:'off'}], state.opts.wmdate||'on')));
+    area.appendChild(optRow('Stamp density', segControl('wmdensity',[{label:'Light',value:'low'},{label:'Medium',value:'med'},{label:'Heavy',value:'high'}], state.opts.wmdensity||'med')));
+  }
+  if(t==='exampreset'){
+    area.appendChild(optRow('Exam / form', segControl('exam',Object.keys(EXAM_SPECS).map(k=>({label:EXAM_SPECS[k].label,value:k})), state.opts.exam||'ibps'),'Sizes follow the common official specs — always confirm against your notification'));
+    area.appendChild(optRow('What are you resizing?', segControl('examkind',[{label:'📷 Photo',value:'photo'},{label:'✍️ Signature',value:'sign'}], state.opts.examkind||'photo')));
   }
 }
 function rangeInput(name, min, max, def, suffix){
@@ -1376,6 +1499,187 @@ async function buildRedactUI(area){
       wrap.appendChild(disp);
     });
   }catch(e){ info.textContent='Could not load: '+e.message; }
+}
+
+/* =========================================================
+   NEW India-first tools — shared helpers & builders
+   ========================================================= */
+const canvasBlob = (c,q)=>new Promise(r=>c.toBlob(r,'image/jpeg',q));
+
+/* exam photo/signature specs (widely-used values; users are told to verify) */
+const EXAM_SPECS = {
+  ssc:  { label:'SSC', photo:{w:200,h:230,min:20,max:50}, sign:{w:140,h:60,min:10,max:20} },
+  upsc: { label:'UPSC', photo:{w:320,h:400,min:20,max:300}, sign:{w:320,h:240,min:20,max:300} },
+  ibps: { label:'IBPS / Bank', photo:{w:200,h:230,min:20,max:50}, sign:{w:140,h:60,min:10,max:20} },
+  neet: { label:'NEET', photo:{w:200,h:230,min:10,max:200}, sign:{w:140,h:60,min:4,max:30} },
+  jee:  { label:'JEE', photo:{w:200,h:230,min:10,max:200}, sign:{w:140,h:60,min:4,max:30} },
+  rrb:  { label:'RRB', photo:{w:150,h:200,min:15,max:40}, sign:{w:140,h:60,min:10,max:40} },
+};
+
+/* render any image/PDF file into an array of canvases */
+async function renderFileToCanvases(f){
+  const canvases=[];
+  if(/\.pdf$/i.test(f.name)){
+    const pdfjs=await getPdfjs(); const pdf=await pdfjs.getDocument({data:f.bytes.slice(0)}).promise;
+    for(let i=1;i<=pdf.numPages;i++){ const pg=await pdf.getPage(i); const vp=pg.getViewport({scale:1.7}); const cv=document.createElement('canvas'); cv.width=vp.width; cv.height=vp.height; await pg.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise; canvases.push(cv); }
+  } else {
+    const bmp=await createImageBitmap(new Blob([f.bytes])); const cv=document.createElement('canvas'); cv.width=bmp.width; cv.height=bmp.height; cv.getContext('2d').drawImage(bmp,0,0); canvases.push(cv);
+  }
+  return canvases;
+}
+
+/* explainer panel shown at the top when a NEW tool is opened */
+function toolExplainer(info){
+  const box=document.createElement('div'); box.className='tool-explainer';
+  const pts=info.points.map(p=>`<li><span class="ic">${p[0]}</span><span>${p[1]}</span></li>`).join('');
+  box.innerHTML=`<div class="te-head"><span class="te-tag">NEW</span> ${info.title}</div><ul>${pts}</ul><div class="te-priv">🔒 ${info.priv||'100% on your device — nothing is uploaded.'}</div>`;
+  return box;
+}
+
+/* collect OCR word boxes from Tesseract data (v4/v5 tolerant) */
+function collectOcrWords(data){
+  const words=[]; const push=w=>{ if(w&&w.text&&w.bbox) words.push({text:w.text,x0:w.bbox.x0,y0:w.bbox.y0,x1:w.bbox.x1,y1:w.bbox.y1}); };
+  if(data&&data.words&&data.words.length) data.words.forEach(push);
+  else if(data&&data.blocks) data.blocks.forEach(b=>(b.paragraphs||[]).forEach(p=>(p.lines||[]).forEach(l=>(l.words||[]).forEach(push))));
+  return words;
+}
+function dedupeRects(rs){ const out=[]; rs.forEach(r=>{ if(r.w>0.004&&r.h>0.004&&!out.some(o=>Math.abs(o.x-r.x)<0.02&&Math.abs(o.y-r.y)<0.02&&Math.abs(o.w-r.w)<0.04)) out.push(r); }); return out; }
+
+/* OCR-detect sensitive numbers on a canvas; returns normalised rects */
+async function ocrDetectRects(canvas, kind, onStatus){
+  const T=await getTesseract();
+  onStatus&&onStatus('Loading on-device reader (first use downloads once)…');
+  const worker=await T.createWorker('eng',1,{logger:m=>{ if(m.status==='recognizing text'&&onStatus) onStatus('Scanning… '+Math.round(m.progress*100)+'%'); }});
+  try{
+    let data;
+    try{ ({data}=await worker.recognize(canvas,{},{blocks:true})); }
+    catch(_){ ({data}=await worker.recognize(canvas)); }
+    const words=collectOcrWords(data);
+    const W=canvas.width,H=canvas.height,pad=3;
+    const norm=(x0,y0,x1,y1)=>({x:Math.max(0,(x0-pad)/W),y:Math.max(0,(y0-pad)/H),w:Math.min(1,(x1-x0+2*pad)/W),h:Math.min(1,(y1-y0+2*pad)/H)});
+    const digits=s=>(s||'').replace(/\D/g,'');
+    const rects=[];
+    /* Aadhaar printed as three 4-digit groups on one line */
+    for(let i=0;i<words.length-2;i++){
+      const a=words[i],b=words[i+1],c=words[i+2];
+      if(/^\d{4}$/.test(a.text)&&/^\d{4}$/.test(b.text)&&/^\d{4}$/.test(c.text) && (Math.min(a.y1,c.y1)-Math.max(a.y0,c.y0))>0){
+        if(kind==='aadhaar') rects.push(norm(a.x0,Math.min(a.y0,b.y0),b.x1,Math.max(a.y1,b.y1)));   /* first 8 digits */
+        else rects.push(norm(a.x0,Math.min(a.y0,c.y0),c.x1,Math.max(a.y1,c.y1)));                    /* full 12 digits */
+        i+=2;
+      }
+    }
+    /* token-level patterns */
+    words.forEach(w=>{
+      const t=w.text.replace(/[^\dA-Za-z]/g,''); const d=digits(t);
+      if(/^\d{12}$/.test(d)){ if(kind==='aadhaar'){ const cut=w.x0+(w.x1-w.x0)*8/12; rects.push(norm(w.x0,w.y0,cut,w.y1)); } else rects.push(norm(w.x0,w.y0,w.x1,w.y1)); return; }
+      if(kind!=='aadhaar'){
+        if(/^[A-Za-z]{5}\d{4}[A-Za-z]$/.test(t)) rects.push(norm(w.x0,w.y0,w.x1,w.y1));          /* PAN */
+        else if(/^\d{10}$/.test(d)&&/^[6-9]/.test(d)) rects.push(norm(w.x0,w.y0,w.x1,w.y1));      /* mobile */
+        else if(/^\d{9,18}$/.test(d)) rects.push(norm(w.x0,w.y0,w.x1,w.y1));                       /* account no. */
+      }
+    });
+    return dedupeRects(rects);
+  } finally { try{ await worker.terminate(); }catch(e){} }
+}
+
+/* interactive mask UI (auto-detect + manual draw) — used by Aadhaar mask & PII redact */
+async function buildMaskUI(area, kind){
+  if(!state.files.length){ const p=document.createElement('p'); p.className='hint'; p.textContent='Add your document (image or PDF) above to begin.'; area.appendChild(p); return; }
+  const f=state.files[0];
+  const info=document.createElement('p'); info.className='hint'; info.textContent='Loading your document…'; area.appendChild(info);
+  const acts=document.createElement('div'); acts.className='mask-actions';
+  const btnAuto=document.createElement('button'); btnAuto.type='button'; btnAuto.className='mask-btn primary'; btnAuto.textContent = kind==='aadhaar' ? '🔍 Auto-detect Aadhaar' : '🔍 Auto-detect sensitive info';
+  const btnClear=document.createElement('button'); btnClear.type='button'; btnClear.className='mask-btn'; btnClear.textContent='🧹 Clear boxes';
+  acts.appendChild(btnAuto); acts.appendChild(btnClear); area.appendChild(acts);
+  const status=document.createElement('div'); status.className='mask-status'; status.textContent='Tip: tap Auto-detect — or drag on the page to cover anything by hand.'; area.appendChild(status);
+  const wrap=document.createElement('div'); wrap.style.cssText='display:grid;gap:12px;margin-top:6px'; area.appendChild(wrap);
+  if(state.opts._maskFor!==f.name){ state.opts._maskRects={}; state.opts._maskFor=f.name; state.opts._maskSrc=null; }
+  const disps=[]; const redrawAll=()=>disps.forEach(fn=>fn());
+  try{
+    const canvases=await renderFileToCanvases(f);
+    state.opts._maskSrc=canvases;
+    info.textContent=`${canvases.length} page(s) loaded — black boxes become permanent on download.`;
+    canvases.forEach((src,pi)=>{
+      state.opts._maskRects[pi]=state.opts._maskRects[pi]||[];
+      const disp=document.createElement('canvas'); disp.style.cssText='width:100%;border:1px solid var(--line);border-radius:10px;touch-action:none;cursor:crosshair';
+      const scale=Math.min(1,520/src.width); disp.width=src.width*scale; disp.height=src.height*scale; const g=disp.getContext('2d');
+      function redraw(){ g.clearRect(0,0,disp.width,disp.height); g.drawImage(src,0,0,disp.width,disp.height); g.fillStyle='#000'; (state.opts._maskRects[pi]||[]).forEach(r=>g.fillRect(r.x*disp.width,r.y*disp.height,r.w*disp.width,r.h*disp.height)); }
+      redraw(); disps.push(redraw);
+      let sx,sy,drawing=false;
+      const rel=e=>{ const r=disp.getBoundingClientRect(); const cx=(e.touches?e.touches[0].clientX:e.clientX)-r.left; const cy=(e.touches?e.touches[0].clientY:e.clientY)-r.top; return [cx/r.width,cy/r.height]; };
+      const down=e=>{ e.preventDefault(); const p=rel(e); const hit=(state.opts._maskRects[pi]||[]).findIndex(r=>p[0]>=r.x&&p[0]<=r.x+r.w&&p[1]>=r.y&&p[1]<=r.y+r.h); if(hit>=0){ state.opts._maskRects[pi].splice(hit,1); redraw(); return; } drawing=true; [sx,sy]=p; };
+      const mv=e=>{ if(!drawing)return; e.preventDefault(); const [x,y]=rel(e); redraw(); g.fillStyle='rgba(0,0,0,.5)'; g.fillRect(Math.min(sx,x)*disp.width,Math.min(sy,y)*disp.height,Math.abs(x-sx)*disp.width,Math.abs(y-sy)*disp.height); };
+      const up=e=>{ if(!drawing)return; drawing=false; const [x,y]=rel(e); const w=Math.abs(x-sx),h=Math.abs(y-sy); if(w>0.008&&h>0.008) state.opts._maskRects[pi].push({x:Math.min(sx,x),y:Math.min(sy,y),w,h}); redraw(); };
+      ['mousedown','touchstart'].forEach(ev=>disp.addEventListener(ev,down,{passive:false}));
+      ['mousemove','touchmove'].forEach(ev=>disp.addEventListener(ev,mv,{passive:false}));
+      ['mouseup','touchend'].forEach(ev=>disp.addEventListener(ev,up));
+      wrap.appendChild(disp);
+    });
+    btnClear.onclick=()=>{ Object.keys(state.opts._maskRects).forEach(k=>state.opts._maskRects[k]=[]); redrawAll(); status.textContent='Cleared. Draw boxes, or tap Auto-detect.'; };
+    btnAuto.onclick=async()=>{ btnAuto.disabled=true; const old=btnAuto.textContent; btnAuto.textContent='Scanning…';
+      try{ let total=0;
+        for(let pi=0;pi<canvases.length;pi++){ status.textContent=`Scanning page ${pi+1} of ${canvases.length}…`; const found=await ocrDetectRects(canvases[pi],kind,s=>status.textContent=s); (state.opts._maskRects[pi]=state.opts._maskRects[pi]||[]).push(...found); total+=found.length; redrawAll(); }
+        status.textContent = total ? `✓ Covered ${total} item(s). Check the preview — add or remove boxes if needed, then Process.` : 'Couldn’t auto-detect clearly — please drag on the page to cover the numbers by hand.';
+      }catch(e){ console.warn('[KaagazPDF] detect',e); status.textContent='Auto-detect needs internet to load the on-device reader. Please drag to cover the numbers by hand.'; }
+      finally{ btnAuto.disabled=false; btnAuto.textContent=old; }
+    };
+  }catch(e){ info.textContent='Could not load: '+e.message; }
+}
+
+/* flatten mask boxes permanently into the output (image or PDF) */
+async function flattenMaskOutput(files,label,stat){
+  const src=state.opts._maskSrc, rects=state.opts._maskRects||{};
+  if(!src||!src.length) throw new Error('Please load your document first.');
+  let any=false;
+  const outs=src.map((cv,pi)=>{ const c=document.createElement('canvas'); c.width=cv.width; c.height=cv.height; const g=c.getContext('2d'); g.drawImage(cv,0,0); g.fillStyle='#000'; (rects[pi]||[]).forEach(r=>{ any=true; g.fillRect(r.x*cv.width,r.y*cv.height,r.w*cv.width,r.h*cv.height); }); return c; });
+  if(!any) throw new Error('Nothing is covered yet. Tap “Auto-detect”, or drag on the page to cover the numbers.');
+  const f=files[0]; const isPdf=/\.pdf$/i.test(f.name);
+  if(!isPdf){ const blob=await canvasBlob(outs[0],0.92); return { blob, name:'kaagaz-'+label+'.jpg', stat }; }
+  const doc=await PDFDocument.create();
+  for(let i=0;i<outs.length;i++){ setProgress(40+50*i/outs.length,`Finalising page ${i+1}…`); const jpg=await (await fetch(outs[i].toDataURL('image/jpeg',0.9))).arrayBuffer(); const img=await doc.embedJpg(jpg); const pg=doc.addPage([outs[i].width,outs[i].height]); pg.drawImage(img,{x:0,y:0,width:outs[i].width,height:outs[i].height}); }
+  return { blob:new Blob([await doc.save()],{type:'application/pdf'}), name:'kaagaz-'+label+'.pdf', stat };
+}
+
+/* Self-attest: name + date + optional signature pad */
+function buildSelfAttestUI(area){
+  if(!state.files.length){ const p=document.createElement('p'); p.className='hint'; p.textContent='Add a PDF or image above to self-attest.'; area.appendChild(p); return; }
+  const today=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+  area.appendChild(optRow('Your name (optional)', textInput('attestName','e.g. Goutam Dalal', state.opts.attestName||'')));
+  area.appendChild(optRow('Date', textInput('attestDate', today, state.opts.attestDate||today),'Auto-filled with today — edit if needed'));
+  area.appendChild(optRow('Stamp position', segControl('attestPos',[{label:'Bottom-right',value:'br'},{label:'Bottom-left',value:'bl'},{label:'Bottom-centre',value:'bc'}], state.opts.attestPos||'br')));
+  const padWrap=document.createElement('div');
+  const pad=document.createElement('canvas'); pad.width=520; pad.height=150; pad.style.cssText='width:100%;max-width:520px;border:2px dashed #c9c9ef;border-radius:14px;background:#fff;touch-action:none;cursor:crosshair';
+  const pg=pad.getContext('2d'); pg.lineWidth=3; pg.lineCap='round'; pg.strokeStyle='#10123a'; let drawing=false,last=null;
+  const pos=e=>{ const r=pad.getBoundingClientRect(); const cx=(e.touches?e.touches[0].clientX:e.clientX)-r.left; const cy=(e.touches?e.touches[0].clientY:e.clientY)-r.top; return [cx*pad.width/r.width,cy*pad.height/r.height]; };
+  const st=e=>{ e.preventDefault(); drawing=true; last=pos(e); };
+  const mv=e=>{ if(!drawing)return; e.preventDefault(); const p=pos(e); pg.beginPath(); pg.moveTo(last[0],last[1]); pg.lineTo(p[0],p[1]); pg.stroke(); last=p; state.opts.sigDataUrl=pad.toDataURL('image/png'); };
+  const en=()=>drawing=false;
+  ['mousedown','touchstart'].forEach(ev=>pad.addEventListener(ev,st,{passive:false}));
+  ['mousemove','touchmove'].forEach(ev=>pad.addEventListener(ev,mv,{passive:false}));
+  ['mouseup','mouseleave','touchend'].forEach(ev=>pad.addEventListener(ev,en));
+  const clr=document.createElement('button'); clr.type='button'; clr.className='btn btn-ghost'; clr.style.marginTop='8px'; clr.textContent='↺ Clear signature';
+  clr.onclick=()=>{ pg.clearRect(0,0,pad.width,pad.height); state.opts.sigDataUrl=null; };
+  padWrap.appendChild(pad); padWrap.appendChild(clr);
+  area.appendChild(optRow('Signature (optional — draw here)', padWrap,'Leave blank for a text-only “Self Attested” stamp'));
+}
+
+/* e-Aadhaar: password-builder helper */
+function buildEaadhaarUI(area){
+  const help=document.createElement('div'); help.className='tool-explainer'; help.style.background='#f4f9ff'; help.style.borderColor='#dbe7fb';
+  help.innerHTML='<div class="te-head">🔑 Build your e-Aadhaar password</div>';
+  const row=document.createElement('div'); row.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px';
+  const nameI=document.createElement('input'); nameI.type='text'; nameI.placeholder='Name as on Aadhaar';
+  const yrI=document.createElement('input'); yrI.type='text'; yrI.inputMode='numeric'; yrI.placeholder='Birth year e.g. 1990';
+  [nameI,yrI].forEach(i=>i.style.cssText='border:1.6px solid var(--line);border-radius:12px;padding:12px 14px;font-size:.95rem;width:100%');
+  row.appendChild(nameI); row.appendChild(yrI); help.appendChild(row);
+  const out=document.createElement('div'); out.style.cssText='margin-top:10px;font-weight:800;font-size:1.02rem;color:var(--indigo);letter-spacing:.02em'; out.textContent='Password: —'; help.appendChild(out);
+  const useBtn=document.createElement('button'); useBtn.type='button'; useBtn.className='mask-btn primary'; useBtn.style.marginTop='10px'; useBtn.textContent='Use this password ↓'; help.appendChild(useBtn);
+  area.appendChild(help);
+  const passRow=optRow('Password', textInput('eapassword','First 4 letters CAPS + birth year', state.opts.eapassword||''),'Example: name “Goutam”, born 1990 → GOUT1990');
+  const passInput=passRow.querySelector('input'); area.appendChild(passRow);
+  const calc=()=>{ const nm=(nameI.value||'').replace(/[^A-Za-z]/g,'').toUpperCase(); const yr=(yrI.value||'').replace(/\D/g,'').slice(0,4); const pw=(nm.length>=1&&yr.length===4)? nm.slice(0,4)+yr : ''; out.textContent='Password: '+(pw||'—'); return pw; };
+  nameI.oninput=calc; yrI.oninput=calc;
+  useBtn.onclick=()=>{ const pw=calc(); if(pw){ passInput.value=pw; state.opts.eapassword=pw; toast('Password filled — now tap Process','🔑'); } else toast('Enter name and a 4-digit birth year first','ℹ️'); };
 }
 
 /* ---- OCR engine loader (Tesseract.js, on-device) ---- */
@@ -1892,6 +2196,127 @@ const ENGINES = {
     const doc=await PDFDocument.create();
     for(let i=0;i<outCanvases.length;i++){ setProgress(40+50*i/outCanvases.length,`Flattening page ${i+1}…`); const jpg=await (await fetch(outCanvases[i].toDataURL('image/jpeg',0.9))).arrayBuffer(); const img=await doc.embedJpg(jpg); const pg=doc.addPage([outCanvases[i].width,outCanvases[i].height]); pg.drawImage(img,{x:0,y:0,width:outCanvases[i].width,height:outCanvases[i].height}); }
     return { blob:new Blob([await doc.save()],{type:'application/pdf'}), name:'kaagaz-redacted.pdf', stat:'Info permanently hidden — data is gone, not just covered' };
+  },
+
+  /* ---- NEW: Aadhaar masking & auto PII redaction (share buildMaskUI) ---- */
+  async aadhaarmask(files){ return flattenMaskOutput(files,'aadhaar-masked','Aadhaar masked & flattened — the hidden digits are gone, not just covered'); },
+  async piiredact(files){ return flattenMaskOutput(files,'redacted','Sensitive info blacked out & flattened — data removed for good'); },
+
+  /* ---- NEW: Self-attest stamp ---- */
+  async selfattest(files){
+    const f=files[0]; const isPdf=/\.pdf$/i.test(f.name);
+    const name=(state.opts.attestName||'').trim();
+    const date=(state.opts.attestDate||'').trim();
+    const pos=state.opts.attestPos||'br';
+    const l1='Self Attested';
+    const l2=[name,date].filter(Boolean).join('   ·   ');
+    if(isPdf){
+      const src=await PDFDocument.load(f.bytes,{ignoreEncryption:true});
+      const fontB=await src.embedFont(StandardFonts.HelveticaBold);
+      const fontR=await src.embedFont(StandardFonts.Helvetica);
+      let sigPng=null; if(state.opts.sigDataUrl){ try{ sigPng=await src.embedPng(await (await fetch(state.opts.sigDataUrl)).arrayBuffer()); }catch(e){} }
+      const pages=src.getPages();
+      pages.forEach((p,i)=>{ setProgress(20+65*i/pages.length,`Stamping page ${i+1}…`);
+        const {width,height}=p.getSize();
+        const fs=Math.max(9,Math.min(13,width/48));
+        const w1=fontB.widthOfTextAtSize(l1,fs+1), w2=l2?fontR.widthOfTextAtSize(l2,fs-1):0;
+        let sigW=0,sigH=0; if(sigPng){ sigW=Math.min(150,width*0.32); sigH=sigW*(sigPng.height/sigPng.width); }
+        const pad=8, margin=20, innerW=Math.max(w1,w2,sigW), boxW=innerW+pad*2;
+        const boxH=pad+(sigPng?sigH+4:0)+(fs+1)+(l2?(fs-1)+4:0)+pad;
+        const bx = pos==='bl'?margin : pos==='bc'?(width-boxW)/2 : width-boxW-margin, by=margin;
+        p.drawRectangle({x:bx,y:by,width:boxW,height:boxH,color:rgb(1,1,1),opacity:0.72,borderColor:rgb(0.8,0.8,0.9),borderWidth:0.5});
+        let ty=by+boxH-pad;
+        if(sigPng){ ty-=sigH; p.drawImage(sigPng,{x:bx+pad,y:ty,width:sigW,height:sigH}); ty-=4; }
+        ty-=(fs+1); p.drawText(l1,{x:bx+pad,y:ty,size:fs+1,font:fontB,color:rgb(0.07,0.07,0.56)});
+        if(l2){ ty-=((fs-1)+4); p.drawText(l2,{x:bx+pad,y:ty,size:fs-1,font:fontR,color:rgb(0.2,0.2,0.33)}); }
+      });
+      return { blob:new Blob([await src.save()],{type:'application/pdf'}), name:'kaagaz-attested.pdf', stat:`Self-attested ${pages.length} page(s)` };
+    } else {
+      const bmp=await createImageBitmap(new Blob([f.bytes]));
+      const c=document.createElement('canvas'); c.width=bmp.width; c.height=bmp.height; const g=c.getContext('2d'); g.drawImage(bmp,0,0);
+      const scale=Math.max(0.6,c.width/700), fs=Math.round(22*scale), fs2=Math.round(fs*0.7);
+      g.textBaseline='top';
+      g.font=`800 ${fs}px Arial,sans-serif`; const w1=g.measureText(l1).width;
+      g.font=`600 ${fs2}px Arial,sans-serif`; const w2=l2?g.measureText(l2).width:0;
+      let sig=null,sw=0,sh=0; if(state.opts.sigDataUrl){ try{ sig=await createImageBitmap(await (await fetch(state.opts.sigDataUrl)).blob()); sw=Math.min(c.width*0.3,240*scale); sh=sw*(sig.height/sig.width); }catch(e){} }
+      const pad=Math.round(14*scale), innerW=Math.max(w1,w2,sw), boxW=innerW+pad*2;
+      const boxH=pad+(sig?sh+8:0)+fs+4+(l2?fs2+6:0)+pad;
+      const margin=Math.round(16*scale);
+      const bx = pos==='bl'?margin : pos==='bc'?(c.width-boxW)/2 : c.width-boxW-margin;
+      const by = c.height-boxH-margin;
+      g.fillStyle='rgba(255,255,255,0.74)'; g.fillRect(bx,by,boxW,boxH);
+      g.strokeStyle='rgba(120,120,180,0.5)'; g.lineWidth=1; g.strokeRect(bx+0.5,by+0.5,boxW-1,boxH-1);
+      let y=by+pad;
+      if(sig){ g.drawImage(sig,bx+pad,y,sw,sh); y+=sh+8; }
+      g.fillStyle='#12128f'; g.font=`800 ${fs}px Arial,sans-serif`; g.fillText(l1,bx+pad,y); y+=fs+4;
+      if(l2){ g.fillStyle='#333355'; g.font=`600 ${fs2}px Arial,sans-serif`; g.fillText(l2,bx+pad,y); }
+      const blob=await canvasBlob(c,0.92);
+      return { blob, name:'kaagaz-attested.jpg', stat:'Self-attested stamp added' };
+    }
+  },
+
+  /* ---- NEW: Share-safe traceable watermark ---- */
+  async sharewatermark(files){
+    const purpose=(state.opts.wmpurpose||'').trim();
+    const withDate=(state.opts.wmdate||'on')==='on';
+    const today=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+    const label=('Only for '+(purpose||'verification')+(withDate?' · '+today:'')).slice(0,60);
+    const density=state.opts.wmdensity||'med';
+    const f=files[0]; const isPdf=/\.pdf$/i.test(f.name);
+    if(isPdf){
+      const src=await PDFDocument.load(f.bytes,{ignoreEncryption:true});
+      const font=await src.embedFont(StandardFonts.HelveticaBold);
+      const pages=src.getPages();
+      pages.forEach((p,i)=>{ setProgress(15+70*i/pages.length,`Stamping page ${i+1}…`);
+        const {width,height}=p.getSize(); const size=Math.max(9,Math.min(width,height)/30);
+        const gap=size*(density==='high'?7:density==='low'?13:10); const tw=font.widthOfTextAtSize(label,size);
+        for(let y=-height*0.1;y<height*1.15;y+=gap){ for(let x=-width*0.1;x<width*1.15;x+=(tw+gap)){ p.drawText(label,{x,y,size,font,color:rgb(0.5,0.5,0.72),opacity:0.16,rotate:degrees(-30)}); } }
+      });
+      return { blob:new Blob([await src.save()],{type:'application/pdf'}), name:'kaagaz-protected.pdf', stat:'Traceable watermark added to every page' };
+    } else {
+      const bmp=await createImageBitmap(new Blob([f.bytes]));
+      const c=document.createElement('canvas'); c.width=bmp.width; c.height=bmp.height; const g=c.getContext('2d'); g.drawImage(bmp,0,0);
+      const size=Math.max(12,Math.round(c.width/26)); g.font=`700 ${size}px Arial,sans-serif`; g.fillStyle='rgba(90,90,150,0.20)'; g.textBaseline='middle';
+      const tw=g.measureText(label).width, gap=size*(density==='high'?7:density==='low'?13:10);
+      g.save(); g.translate(c.width/2,c.height/2); g.rotate(-30*Math.PI/180); g.translate(-c.width/2,-c.height/2);
+      for(let y=-c.height*0.2;y<c.height*1.2;y+=gap){ for(let x=-c.width*0.2;x<c.width*1.2;x+=(tw+gap)){ g.fillText(label,x,y); } }
+      g.restore();
+      const blob=await canvasBlob(c,0.92);
+      return { blob, name:'kaagaz-protected.jpg', stat:'Traceable watermark added' };
+    }
+  },
+
+  /* ---- NEW: Exam photo / signature resizer with KB target ---- */
+  async exampreset(files){
+    const spec=EXAM_SPECS[state.opts.exam||'ibps']||EXAM_SPECS.ibps;
+    const kind=state.opts.examkind||'photo'; const cfg=spec[kind];
+    const bmp=await createImageBitmap(new Blob([files[0].bytes]));
+    const {w,h}=cfg;
+    const c=document.createElement('canvas'); c.width=w; c.height=h; const g=c.getContext('2d');
+    g.imageSmoothingEnabled=true; g.imageSmoothingQuality='high';
+    g.fillStyle='#fff'; g.fillRect(0,0,w,h);
+    setProgress(25,'Resizing to exact size…');
+    if(kind==='photo'){ const sc=Math.max(w/bmp.width,h/bmp.height); const sw=w/sc, sh=h/sc; g.drawImage(bmp,(bmp.width-sw)/2,(bmp.height-sh)/2,sw,sh,0,0,w,h); }
+    else { const sc=Math.min(w/bmp.width,h/bmp.height); const dw=bmp.width*sc, dh=bmp.height*sc; g.drawImage(bmp,(w-dw)/2,(h-dh)/2,dw,dh); }
+    setProgress(60,'Fitting to the KB limit…');
+    let q=0.92, blob=await canvasBlob(c,q);
+    while(blob.size/1024>cfg.max && q>0.3){ q-=0.06; blob=await canvasBlob(c,q); }
+    const kb=(blob.size/1024).toFixed(0);
+    const warn = blob.size/1024<cfg.min ? ' (below the min — use a sharper source photo)' : '';
+    return { blob, name:`kaagaz-${state.opts.exam||'ibps'}-${kind}.jpg`, stat:`${w}×${h}px · ${kb} KB · target ${cfg.min}–${cfg.max} KB${warn}` };
+  },
+
+  /* ---- NEW: Open password-protected e-Aadhaar PDF ---- */
+  async eaadhaar(files){
+    const pass=(state.opts.eapassword||'').trim();
+    if(!pass) throw new Error('Enter the e-Aadhaar password (use the helper above to build it).');
+    const pdfjs=await getPdfjs();
+    let pdf;
+    try{ pdf=await pdfjs.getDocument({data:files[0].bytes.slice(0),password:pass}).promise; }
+    catch(e){ if((e&&e.name==='PasswordException')||/password/i.test(e&&e.message||'')) throw new Error('That password didn’t open the PDF. Format = first 4 letters of your name in CAPITALS + birth year, e.g. GOUT1990.'); throw new Error('Could not open this PDF: '+((e&&e.message)||e)); }
+    const doc=await PDFDocument.create();
+    for(let i=1;i<=pdf.numPages;i++){ setProgress(20+65*i/pdf.numPages,`Unlocking page ${i}…`); const pg=await pdf.getPage(i); const vp=pg.getViewport({scale:2}); const cv=document.createElement('canvas'); cv.width=vp.width; cv.height=vp.height; await pg.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise; const jpg=await (await fetch(cv.toDataURL('image/jpeg',0.92))).arrayBuffer(); const img=await doc.embedJpg(jpg); const page=doc.addPage([cv.width,cv.height]); page.drawImage(img,{x:0,y:0,width:cv.width,height:cv.height}); }
+    return { blob:new Blob([await doc.save()],{type:'application/pdf'}), name:'kaagaz-eaadhaar-open.pdf', stat:`Password removed — ${pdf.numPages} page(s), ready to print & share` };
   },
 
   /* ---- Passport photo sheet ---- */
