@@ -1216,6 +1216,9 @@ function setStep(n){
   $('phaseDone').style.display    = n===3 ? '' : 'none';
 }
 
+/* Detect iPhone/iPad so we can open the FULL file picker (Photos + Files) on iOS */
+const IS_IOS = (/iPad|iPhone|iPod/.test(navigator.userAgent)) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
 function openTool(id){
   const t = TOOLS.find(x=>x.id===id);
   if(t.pro && !state.isPro){ openUpgrade(`✨ ${t.name} is a Pro-exclusive tool.`); return; }
@@ -1225,9 +1228,14 @@ function openTool(id){
   $('mIcon').style.background = state.tool.bg;
   $('mTitle').textContent = state.tool.name;
   $('mSub').textContent = state.tool.desc + ' 100% private — processed on your device.';
-  $('dzHint').textContent = state.tool.multiple ? 'Select multiple files — or click to browse' : 'or click anywhere in this box to browse';
+  $('dzHint').textContent = IS_IOS
+    ? '📷 Tap here → pick from Photos or Files (saved files)'
+    : (state.tool.multiple ? 'Select multiple files — or click to browse' : 'or click anywhere in this box to browse');
   const fi = $('fileInput');
-  fi.accept = state.tool.accept; fi.multiple = !!state.tool.multiple; fi.value = '';
+  /* iOS hides the Files/"Browse" option when accept is a specific type — so on iPhone/iPad
+     we open the full picker (Photos + Files) and let addFiles() validate the type instead. */
+  fi.accept = IS_IOS ? '' : state.tool.accept;
+  fi.multiple = !!state.tool.multiple; fi.value = '';
   renderFiles(); renderOpts(); setStep(1);
   $('toolOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
