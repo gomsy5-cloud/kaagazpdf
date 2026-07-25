@@ -383,6 +383,22 @@ body.pro #goProNavBtn{display:none}
   .nav-links .btn{justify-content:center}
   .modal{padding:26px 20px}
 }
+/* ---------- Free Beta mode: hide all payment / Pro UI (reversible via CONFIG.FREE_BETA) ---------- */
+.free-beta #goProNavBtn,
+.free-beta .price-grid,
+.free-beta #acctUpgradeWrap,
+.free-beta .ad-sticky .upgrade-link{display:none!important}
+.beta-banner{display:none}
+.free-beta .beta-banner{display:block;max-width:680px;margin:0 auto;background:linear-gradient(120deg,#3d3bf3,#7a3bf3 55%,#ff8a1e);color:#fff;border-radius:24px;padding:38px 34px;text-align:center;box-shadow:0 24px 60px rgba(61,59,243,.28)}
+.beta-banner .bb-badge{display:inline-block;background:#ffffff2b;border:1px solid #ffffff55;padding:7px 16px;border-radius:100px;font-weight:800;font-size:.78rem;letter-spacing:.08em;margin-bottom:14px}
+.beta-banner h3{font-size:clamp(1.5rem,3vw,2rem);font-weight:800;letter-spacing:-.02em;margin-bottom:10px}
+.beta-banner p{color:#eef;font-size:1.02rem;max-width:520px;margin:0 auto 6px}
+.beta-banner .bb-feats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+.beta-banner .bb-feats span{background:#ffffff22;border:1px solid #ffffff40;border-radius:100px;padding:9px 16px;font-weight:700;font-size:.85rem}
+
+/* ---------- nicer tool icon hover animation ---------- */
+.tool-card:hover .tool-icon{animation:iconPop .55s cubic-bezier(.2,1.6,.35,1)}
+@keyframes iconPop{0%{transform:scale(1) rotate(0)}35%{transform:scale(1.22) rotate(-9deg)}70%{transform:scale(.96) rotate(5deg)}100%{transform:scale(1.12) rotate(-5deg)}}
 </style>
 </head>
 <body>
@@ -398,7 +414,7 @@ body.pro #goProNavBtn{display:none}
       <a href="#privacy">Privacy</a>
       <a href="#pricing">Pricing</a>
       <span class="quota-pill" id="quotaPill" title="Free downloads left today">
-        ⚡ <span id="quotaText">5/5 free today</span>
+        ⚡ <span id="quotaText">🎉 Free Beta</span>
         <span class="quota-bar"><span class="quota-fill" id="quotaFill" style="width:100%"></span></span>
       </span>
       <button class="btn btn-ghost" id="authNavBtn" onclick="onAuthNav()">Login</button>
@@ -416,20 +432,21 @@ body.pro #goProNavBtn{display:none}
 
   <span class="chip"><span class="dot"></span> 100% in-browser · Files never leave your device</span>
   <h1>Every PDF tool India needs.<br><span class="grad">Ek hi jagah pe.</span></h1>
-  <p class="sub">27 PDF & image tools, right inside your browser — including Aadhaar masking, self-attest & exam photo resize. No uploads, no waiting, no <i>tension</i>. 5 free downloads every day, unlimited at just ₹299/month.</p>
+  <p class="sub">27 PDF & image tools, right inside your browser — Aadhaar masking, self-attest, exam photo resize & more. No uploads, no waiting, no <i>tension</i>. <b>Everything is free during our beta</b> — just a quick login.</p>
   <div class="hero-cta">
-    <a href="#tools" class="btn btn-primary btn-xl">🚀 Start free — 5 downloads/day</a>
-    <a href="#pricing" class="btn btn-ghost btn-xl">See pricing</a>
+    <a href="#tools" class="btn btn-primary btn-xl">🚀 Start free — all tools free</a>
+    <a href="#how" class="btn btn-ghost btn-xl">See how it works</a>
   </div>
   <div class="hero-stats">
     <div class="hstat"><b data-count="27">0</b><span>Powerful tools</span></div>
     <div class="hstat"><b><span data-count="100">0</span>%</b><span>Browser-side processing</span></div>
-    <div class="hstat"><b>₹<span data-count="299">0</span></b><span>Unlimited / month</span></div>
+    <div class="hstat"><b>₹0</b><span>Free during beta</span></div>
     <div class="hstat"><b><span data-count="0">0</span></b><span>Docs stored on servers</span></div>
   </div>
 </header>
 
-<div class="ad-slot reveal"><div class="ad-box"><span class="ad-label">Ad</span><b>Advertisement space — 728×90</b>Free plan is supported by ads. Go Pro to remove them.</div></div>
+<!-- Ad space — Google Auto Ads fill this automatically after AdSense approval -->
+<div class="ad-slot" aria-hidden="true"></div>
 
 <section id="tools">
   <div class="sec-head reveal">
@@ -472,13 +489,20 @@ body.pro #goProNavBtn{display:none}
   </div>
 </section>
 
-<div class="ad-slot reveal"><div class="ad-box"><span class="ad-label">Ad</span><b>Advertisement space — 728×90</b>Ads keep KaagazPDF free for everyone. Pro users see zero ads.</div></div>
+<!-- Ad space — Google Auto Ads fill this automatically after AdSense approval -->
+<div class="ad-slot" aria-hidden="true"></div>
 
 <section id="pricing">
   <div class="sec-head reveal">
     <span class="tag">Pricing</span>
-    <h2>Simple, honest, Indian pricing</h2>
-    <p>Less than one plate of momos per week. Cancel anytime.</p>
+    <h2>Free while we're in beta 🎉</h2>
+    <p>Every tool is completely free right now — no card, no daily limit. We may introduce an optional Pro plan later.</p>
+  </div>
+  <div class="beta-banner reveal">
+    <span class="bb-badge">🎉 FREE BETA</span>
+    <h3>All 27 tools — free, unlimited &amp; private</h3>
+    <p>Use every PDF &amp; image tool as much as you like during our beta. Just a quick free login to get started — no payment, no card, no catch.</p>
+    <div class="bb-feats"><span>✓ Unlimited use</span><span>✓ All 27 tools</span><span>✓ 100% private</span><span>✓ No card needed</span></div>
   </div>
   <div class="price-grid">
     <div class="price-card reveal">
@@ -520,12 +544,31 @@ body.pro #goProNavBtn{display:none}
   </div>
   <div class="faq reveal">
     <details class="faq-item"><summary>Are my documents really safe? <span class="pm">+</span></summary><div class="ans">Yes. KaagazPDF processes files using in-browser technology (WebAssembly + JavaScript), so your document is opened and edited on <b>your own device</b>. It is never uploaded to any server — you can even switch off your internet after the page loads and tools will still work. Additionally, the working session auto-clears every hour.</div></details>
-    <details class="faq-item"><summary>What does "5 free downloads per day" mean? <span class="pm">+</span></summary><div class="ans">You can process and download up to 5 files every day at no cost, supported by ads. The counter resets at midnight IST. Pro users (₹299/month) get unlimited downloads, no ads, and the Pro-only tools (Image Enhancer, Passport Photo Sheet & background change).</div></details>
-    <details class="faq-item"><summary>Do I need an account to use KaagazPDF? <span class="pm">+</span></summary><div class="ans">You can open any tool and process files without an account, but a <b>quick free sign-up</b> (just name + email) is needed to download your finished file. This is how we track your 5 free daily downloads fairly across devices. <b>Pro (₹299/month)</b> is linked to the same account, so unlimited works everywhere you log in. Your documents themselves are never uploaded or linked to your account.</div></details>
-    <details class="faq-item"><summary>How do I pay for Pro? <span class="pm">+</span></summary><div class="ans">Pay via UPI (Google Pay, PhonePe, Paytm, BHIM), debit/credit card, or net banking. It's a simple ₹299/month plan that you can cancel anytime — no lock-in, no hidden charges.</div></details>
+    <details class="faq-item"><summary>Is KaagazPDF really free? <span class="pm">+</span></summary><div class="ans">Yes — during our beta, <b>all 27 tools are completely free and unlimited</b>. There is no daily limit and no payment. All we ask is a quick free login so we can keep the beta fair and keep improving the tools. The site is supported by ads.</div></details>
+    <details class="faq-item"><summary>Do I need an account? <span class="pm">+</span></summary><div class="ans">Yes — a <b>quick free login</b> (name + email, or Google) is needed to use the tools and download your files during the beta. It takes about ten seconds. Importantly, your <b>documents are never uploaded or linked to your account</b> — every file is processed privately on your own device.</div></details>
+    <details class="faq-item"><summary>Will it always stay free? <span class="pm">+</span></summary><div class="ans">Everything is free during the beta. In future we may add an <b>optional</b> Pro plan with extras for heavy users, but the core tools will always keep a generous free tier — and you will never be charged without clearly choosing to upgrade.</div></details>
     <details class="faq-item"><summary>Do the tools work on mobile? <span class="pm">+</span></summary><div class="ans">Bilkul! KaagazPDF works on any modern browser — Android, iPhone, laptop or desktop. No app installation required.</div></details>
     <details class="faq-item"><summary>What happens during the hourly auto-clear? <span class="pm">+</span></summary><div class="ans">Every 60 minutes, all files and working data in your session memory are wiped automatically. This is an extra safety layer on top of the fact that nothing was ever uploaded in the first place.</div></details>
   </div>
+</section>
+
+<section id="guides-teaser">
+  <div class="sec-head reveal">
+    <span class="tag">Guides</span>
+    <h2>Free how-to guides for Indian paperwork</h2>
+    <p>Step-by-step help for the document tasks people search for most — passport photos, Aadhaar, exam forms and more. Written for students, job-seekers and everyday users.</p>
+  </div>
+  <div class="tools-grid">
+    <a class="tool-card reveal" href="mask-aadhaar-online.html"><span class="go">→</span><span class="tool-icon" style="background:#eaf2ff">🆔</span><h3>Mask your Aadhaar number</h3><p>Hide the first 8 digits for safe KYC — a UIDAI-style masked Aadhaar.</p></a>
+    <a class="tool-card reveal" href="self-attest-documents.html"><span class="go">→</span><span class="tool-icon" style="background:#eafaf0">🖊️</span><h3>Self-attest documents</h3><p>Add "Self Attested", date &amp; signature to every page — no printer.</p></a>
+    <a class="tool-card reveal" href="passport-photo-size-india.html"><span class="go">→</span><span class="tool-icon" style="background:#fff0f6">🪪</span><h3>Passport photo size (India)</h3><p>The exact 35×45 mm specs and how to get them right.</p></a>
+    <a class="tool-card reveal" href="reduce-photo-size-kb.html"><span class="go">→</span><span class="tool-icon" style="background:#fff3dc">📐</span><h3>Reduce photo size in KB</h3><p>Hit a 20 KB / 50 KB target for online forms without blur.</p></a>
+    <a class="tool-card reveal" href="compress-pdf-to-50kb.html"><span class="go">→</span><span class="tool-icon" style="background:#e5f7f0">🗜️</span><h3>Compress PDF to 50 KB</h3><p>Shrink a heavy PDF to fit strict upload limits.</p></a>
+    <a class="tool-card reveal" href="eaadhaar-pdf-password.html"><span class="go">→</span><span class="tool-icon" style="background:#fff0e8">🔓</span><h3>Open your e-Aadhaar PDF</h3><p>The password format and how to unlock it.</p></a>
+    <a class="tool-card reveal" href="scanned-pdf-to-word-ocr.html"><span class="go">→</span><span class="tool-icon" style="background:#e6f0ff">🔎</span><h3>Scanned PDF to Word (OCR)</h3><p>Turn scans into editable text — English, Hindi &amp; Bengali.</p></a>
+    <a class="tool-card reveal" href="jpg-to-pdf.html"><span class="go">→</span><span class="tool-icon" style="background:#ffe9f2">📸</span><h3>Convert JPG to PDF</h3><p>Combine several photos into one clean PDF on your phone.</p></a>
+  </div>
+  <div style="text-align:center;margin-top:26px"><a href="guides.html" class="btn btn-ghost">Read all guides →</a></div>
 </section>
 
 <footer>
@@ -536,16 +579,13 @@ body.pro #goProNavBtn{display:none}
     </div>
     <div><h4>Tools</h4><a href="#tools">Merge PDF</a><a href="#tools">Split PDF</a><a href="#tools">Compress PDF</a><a href="#tools">PDF to JPG</a><a href="#tools">JPG to PDF</a></div>
     <div><h4>Company</h4><a href="about.html">About us</a><a href="guides.html">Guides & how-tos</a><a href="#privacy">Privacy promise</a><a href="#pricing">Pricing</a><a href="#faq-sec">FAQ</a></div>
-    <div><h4>Popular guides</h4><a href="compress-pdf-to-50kb.html">Compress PDF to 50 KB</a><a href="passport-photo-size-india.html">Passport photo size</a><a href="scanned-pdf-to-word-ocr.html">Scanned PDF to Word</a><a href="resize-photo-signature-exam-form.html">Exam form photo size</a></div>
-    <div><h4>Legal</h4><a href="terms.html">Terms of service</a><a href="privacy.html">Privacy policy</a><a href="refund.html">Refund policy</a><a href="mailto:support@kaagazpdf.in">Contact us</a></div>
+    <div><h4>Popular guides</h4><a href="mask-aadhaar-online.html">Mask your Aadhaar number</a><a href="self-attest-documents.html">Self-attest documents</a><a href="compress-pdf-to-50kb.html">Compress PDF to 50 KB</a><a href="passport-photo-size-india.html">Passport photo size</a><a href="reduce-photo-size-kb.html">Reduce photo size in KB</a></div>
+    <div><h4>Legal &amp; help</h4><a href="terms.html">Terms of service</a><a href="privacy.html">Privacy policy</a><a href="refund.html">Refund policy</a><a href="contact.html">Contact us</a><a href="guides.html">All guides</a></div>
   </div>
   <div class="foot-bottom">© 2026 KaagazPDF · All processing happens in your browser · No documents are ever stored on our servers</div>
 </footer>
 
-<div class="ad-sticky" id="adSticky">
-  <span>📢 <b>Ad:</b> Free plan is ad-supported · <a class="upgrade-link" href="#" onclick="openUpgrade();return false">Remove ads with Pro — ₹299/mo →</a></span>
-  <button class="close-ad" onclick="document.getElementById('adSticky').style.display='none'">✕</button>
-</div>
+<!-- Sticky ad bar removed for a clean layout; Google Auto Ads handle placement after approval. -->
 
 <!-- ============ TOOL MODAL ============ -->
 <div class="overlay" id="toolOverlay">
@@ -638,7 +678,7 @@ body.pro #goProNavBtn{display:none}
     <div id="paidCheckWrap" style="display:none;margin-top:10px">
       <button class="btn btn-ghost btn-block" id="paidCheckBtn" onclick="refreshPlan()">✅ I've paid — activate my Pro</button>
     </div>
-    <p style="text-align:center;font-size:.75rem;color:var(--ink-mute);margin-top:12px" id="payNote">Demo checkout — paste your Razorpay link in CONFIG for live payments.</p>
+    <p style="text-align:center;font-size:.75rem;color:var(--ink-mute);margin-top:12px" id="payNote">🔒 Secure payment · cancel anytime.</p>
   </div>
 </div>
 
@@ -649,9 +689,9 @@ body.pro #goProNavBtn{display:none}
     <div class="up-hero" style="margin-bottom:16px">
       <span class="crown" id="authEmoji">🙏</span>
       <h3 id="authTitle">Create your free account</h3>
-      <p id="authSub">Your Pro plan stays linked to your account — use it on phone, laptop, anywhere.</p>
+      <p id="authSub">Free login to use all 27 tools — it takes about ten seconds.</p>
     </div>
-    <div class="perk-strip"><span>⚡ Unlimited with Pro</span><span>🚫 Zero ads</span><span>📱 Works on all devices</span></div>
+    <div class="perk-strip"><span>🎉 All 27 tools free</span><span>🔒 100% private</span><span>📱 Works on all devices</span></div>
     <div class="auth-tabs">
       <button id="tabSignup" class="on" onclick="setAuthMode('signup')">Sign up</button>
       <button id="tabLogin" onclick="setAuthMode('login')">Login</button>
@@ -677,7 +717,7 @@ body.pro #goProNavBtn{display:none}
       </div>
       <button class="btn btn-primary btn-block" id="authSubmit" type="submit">Create account →</button>
     </form>
-    <p class="auth-note">🔒 Your documents are never linked to your account — processing stays 100% on your device.<br><span style="opacity:.75">Demo auth — connect Supabase/Firebase for production.</span></p>
+    <p class="auth-note">🔒 Your documents are never linked to your account — processing stays 100% on your device.</p>
   </div>
 </div>
 
@@ -759,9 +799,11 @@ const CONFIG = Object.assign({
   SUPABASE_URL: 'https://ftufjkcmevmeeqygvwgy.supabase.co',          // e.g. 'https://abcdefgh.supabase.co'
   SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0dWZqa2NtZXZtZWVxeWd2d2d5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMzMzA5NjMsImV4cCI6MjA5ODkwNjk2M30.asxt-PWxHWMX2KYY_LFzB7Fhc5docDt8V3LMHrBUBSY',     // long key starting with 'eyJ...'
   RAZORPAY_PAYMENT_LINK: 'https://rzp.io/rzp/bHS5uxT',  // e.g. 'https://razorpay.me/@yourname' or 'https://rzp.io/rzp/xxxx'
-  GOOGLE_AUTH: true   // show "Continue with Google" — needs Google enabled in Supabase → Authentication → Providers
+  GOOGLE_AUTH: true,  // show "Continue with Google" — needs Google enabled in Supabase → Authentication → Providers
+  FREE_BETA: true     // FREE BETA: all tools free & unlimited, payment hidden, login required. Set false to restore Pro/pricing.
 }, window.KAAGAZ_CONFIG || {});
 const LIVE = !!(CONFIG.SUPABASE_URL && CONFIG.SUPABASE_ANON_KEY);
+if(CONFIG.FREE_BETA){ try{ document.documentElement.classList.add('free-beta'); }catch(e){} }
 
 /* ---- Supabase client (loaded only when keys are configured) ---- */
 let _sb = null;
@@ -1135,13 +1177,14 @@ const USE_HINTS = {
 const grid = document.getElementById('toolsGrid');
 TOOLS.forEach((t,i)=>{
   const b = document.createElement('button');
-  b.className = 'tool-card reveal' + (t.isNew ? ' is-new' : '');
+  b.className = 'tool-card reveal';
   b.style.transitionDelay = (i%4)*0.06+'s';
-  const newBadge = t.isNew ? '<span class="tool-new-badge">✦ NEW</span>' : '';
-  const topRight = t.pro ? '<span class="tool-pro">👑 PRO</span>' : (t.proFeature ? '<span class="tool-pro" style="background:#f0f0fb;color:#3d3bf3;box-shadow:none">FREE + 👑</span>' : '<span class="go">→</span>');
+  const topRight = (!CONFIG.FREE_BETA && t.pro) ? '<span class="tool-pro">👑 PRO</span>'
+                 : (!CONFIG.FREE_BETA && t.proFeature) ? '<span class="tool-pro" style="background:#f0f0fb;color:#3d3bf3;box-shadow:none">FREE + 👑</span>'
+                 : '<span class="go">→</span>';
   const hintText = USE_HINTS[t.id] || t.hint || '';
   const hoverHint = hintText ? `<span class="tool-hoverhint"><b><span class="bulb">💡</span> How to use</b>${hintText}</span>` : '';
-  b.innerHTML = `${newBadge}${topRight}<span class="tool-icon" style="background:${t.bg}">${t.icon}</span><h3>${t.name}</h3><p>${t.desc}</p>${hoverHint}`;
+  b.innerHTML = `${topRight}<span class="tool-icon" style="background:${t.bg}">${t.icon}</span><h3>${t.name}</h3><p>${t.desc}</p>${hoverHint}`;
   b.onclick = ()=>openTool(t.id);
   grid.appendChild(b);
 });
@@ -1167,12 +1210,14 @@ function parseRanges(str, max){
 
 /* ---------------- quota ---------------- */
 function refreshQuota(){
+  if(CONFIG.FREE_BETA){ $('quotaText').textContent = '🎉 Free Beta · Unlimited'; $('quotaFill').style.width = '100%'; return; }
   const left = Math.max(0, state.freeLimit - state.used);
   $('quotaText').textContent = state.isPro ? 'Pro · Unlimited ∞' : `${left}/${state.freeLimit} free today`;
   $('quotaFill').style.width = state.isPro ? '100%' : (left/state.freeLimit*100)+'%';
 }
-function canDownload(){ return state.isPro || state.used < state.freeLimit; }
+function canDownload(){ return CONFIG.FREE_BETA || state.isPro || state.used < state.freeLimit; }
 function consumeDownload(){
+  if(CONFIG.FREE_BETA) return;   /* no daily limit during the free beta */
   if(!state.isPro){ state.used++; refreshQuota();
     if(LIVE && state.user) persistQuota();   /* save to database so quota follows the account */
     const left = state.freeLimit - state.used;
@@ -1221,7 +1266,9 @@ const IS_IOS = (/iPad|iPhone|iPod/.test(navigator.userAgent)) || (navigator.plat
 
 function openTool(id){
   const t = TOOLS.find(x=>x.id===id);
-  if(t.pro && !state.isPro){ openUpgrade(`✨ ${t.name} is a Pro-exclusive tool.`); return; }
+  /* Free beta: every tool is free, but a quick login is required to use it. */
+  if(CONFIG.FREE_BETA && !state.user){ openAuth('signup', ()=>openTool(id), `Login free to use ${t.name} — all 27 tools are free during our beta. 🎉`); return; }
+  if(t.pro && !state.isPro && !CONFIG.FREE_BETA){ openUpgrade(`✨ ${t.name} is a Pro-exclusive tool.`); return; }
   state.tool = t;
   state.files = []; state.result = null; state.opts = {};
   $('mIcon').textContent = state.tool.icon;
@@ -1332,8 +1379,13 @@ function renderOpts(){
   const t = state.tool.id;
   if(NEW_EXPLAIN[t]) area.appendChild(toolExplainer(NEW_EXPLAIN[t]));
   if(t==='split'){
-    area.appendChild(optRow('Split mode', segControl('mode',[{label:'Extract range',value:'range'},{label:'Every page separately',value:'all'}],'range')));
-    area.appendChild(optRow('Page range', textInput('range','e.g. 1-3, 5'), 'Used only in "Extract range" mode'));
+    area.appendChild(optRow('Split mode', segControl('mode',[
+      {label:'By ranges → separate files',value:'ranges'},
+      {label:'Extract into one PDF',value:'range'},
+      {label:'Every page separately',value:'all'}
+    ],'ranges')));
+    area.appendChild(optRow('Page range(s)', textInput('range','e.g. 2-3, 4-6, 7-10'),
+      '“By ranges”: each part (2-3, 4-6…) becomes its own PDF (zipped). “Extract into one”: all listed pages in a single PDF.'));
   }
   if(t==='rotate'){
     area.appendChild(optRow('Rotation', segControl('angle',[{label:'90° ↻',value:90},{label:'180°',value:180},{label:'270° ↺',value:270}],90)));
@@ -1396,9 +1448,9 @@ function renderOpts(){
     /* background change is the Pro feature — resize/compress stays free */
     bgSeg.querySelectorAll('button').forEach((btn,idx)=>{
       if(idx===0) return;
-      btn.textContent += ' 👑';
+      if(!CONFIG.FREE_BETA) btn.textContent += ' 👑';
       const orig = btn.onclick;
-      btn.onclick = ()=>{ if(!state.isPro){ openUpgrade('✨ Background change is a Pro feature — resize & compress stay free.'); return; } orig(); };
+      btn.onclick = ()=>{ if(!state.isPro && !CONFIG.FREE_BETA){ openUpgrade('✨ Background change is a Pro feature — resize & compress stay free.'); return; } orig(); };
     });
     area.appendChild(optRow('Background', bgSeg, 'AI mode cleanly cuts out the person — great for passport photos'));
     area.appendChild(optRow('Background engine', segControl('bgmode',[{label:'🪄 AI (best)',value:'ai'},{label:'Fast fill',value:'fast'}],'ai'),'AI runs on your device — photo is never uploaded. First use downloads a small 5 MB model.'));
@@ -1565,7 +1617,7 @@ async function renderFileToCanvases(f){
 function toolExplainer(info){
   const box=document.createElement('div'); box.className='tool-explainer';
   const pts=info.points.map(p=>`<li><span class="ic">${p[0]}</span><span>${p[1]}</span></li>`).join('');
-  box.innerHTML=`<div class="te-head"><span class="te-tag">NEW</span> ${info.title}</div><ul>${pts}</ul><div class="te-priv">🔒 ${info.priv||'100% on your device — nothing is uploaded.'}</div>`;
+  box.innerHTML=`<div class="te-head"><span class="te-tag">GUIDE</span> ${info.title}</div><ul>${pts}</ul><div class="te-priv">🔒 ${info.priv||'100% on your device — nothing is uploaded.'}</div>`;
   return box;
 }
 
@@ -1773,6 +1825,25 @@ const ENGINES = {
       }
       setProgress(92,'Zipping files…');
       return { blob:makeZip(entries), name:'kaagaz-split-pages.zip', stat:`${total} pages → ${total} PDFs` };
+    }
+    if(state.opts.mode==='ranges'){
+      /* each comma-separated range becomes its OWN PDF (e.g. "2-3, 4-6, 7-10" → 3 files) */
+      const groups = (state.opts.range||'').split(',').map(s=>s.trim()).filter(Boolean);
+      if(!groups.length) throw new Error(`Enter one or more ranges like "2-3, 4-6, 7-10" (this PDF has ${total} pages)`);
+      const entries=[];
+      for(let gi=0; gi<groups.length; gi++){
+        const pgs = parseRanges(groups[gi], total);
+        if(!pgs.length) continue;
+        setProgress(10+80*gi/groups.length, `Making file ${gi+1} of ${groups.length}…`);
+        const doc = await PDFDocument.create();
+        (await doc.copyPages(src, pgs.map(p=>p-1))).forEach(p=>doc.addPage(p));
+        const tag = `${pgs[0]}${pgs.length>1?'-'+pgs[pgs.length-1]:''}`;
+        entries.push({ name:`part-${gi+1}-pages-${tag}.pdf`, data:await doc.save(), tag });
+      }
+      if(!entries.length) throw new Error(`No valid pages found. Use a format like "2-3, 4-6, 7-10".`);
+      if(entries.length===1) return { blob:new Blob([entries[0].data],{type:'application/pdf'}), name:`kaagaz-pages-${entries[0].tag}.pdf`, stat:`Extracted pages ${entries[0].tag}` };
+      setProgress(92,'Zipping files…');
+      return { blob:makeZip(entries), name:'kaagaz-split-ranges.zip', stat:`${entries.length} separate PDFs: ${entries.map(e=>e.tag).join(' · ')}` };
     }
     const pages = parseRanges(state.opts.range||'', total);
     if(!pages.length) throw new Error(`Enter a valid page range (this PDF has ${total} pages)`);
@@ -2058,7 +2129,7 @@ const ENGINES = {
       g.drawImage(bmp, 0, 0, w, h);
     }
     const bg = state.opts.bg || 'keep';
-    if(bg !== 'keep' && !state.isPro) throw new Error('Background change is a Pro feature — resize & compress are free.');
+    if(bg !== 'keep' && !state.isPro && !CONFIG.FREE_BETA) throw new Error('Background change is a Pro feature — resize & compress are free.');
     if(bg !== 'keep'){
       const RGB = { white:[255,255,255], blue:[74,134,232], red:[214,58,58], transparent:null };
       let aiOk = false;
@@ -2644,6 +2715,8 @@ function cancelPro(){
 
 /* ---------------- upgrade ---------------- */
 function openUpgrade(reason){
+  /* During the free beta everything is free — no payment shown. */
+  if(CONFIG.FREE_BETA){ toast('Everything is free during our beta — no payment needed! 🎉','🎁'); return; }
   /* Pro requires an account, so the subscription follows the user across devices */
   if(!state.user){
     openAuth('signup', ()=>openUpgrade(reason), 'Step 1 of 2 — create your free account, then pay ₹299 to activate Pro.');
