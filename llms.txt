@@ -1,0 +1,24 @@
+# KaagazPDF
+
+> India's free, privacy-first PDF & photo toolkit. 27 browser-based tools where files are processed on your own device and never uploaded to any server.
+
+KaagazPDF covers the document tasks people in India deal with most — exam-form photos, Aadhaar and PAN copies, scanned certificates and everyday PDFs. Every tool runs entirely in the browser, so your files stay 100% private. All tools are free during the beta; only a quick free login is required.
+
+## Tools
+- [Compress PDF to 50/100 KB](https://kaagazpdf.in/compress-pdf-to-50kb): shrink a PDF for online form uploads
+- [Merge PDF on mobile](https://kaagazpdf.in/merge-pdf-on-mobile): combine PDFs on any phone
+- [JPG to PDF](https://kaagazpdf.in/jpg-to-pdf): turn photos into a single PDF
+- [Scanned PDF to Word (OCR)](https://kaagazpdf.in/scanned-pdf-to-word-ocr): OCR in English, Hindi & Bengali
+- [Mask Aadhaar online](https://kaagazpdf.in/mask-aadhaar-online): create a UIDAI-style masked Aadhaar for KYC
+- [e-Aadhaar PDF password](https://kaagazpdf.in/eaadhaar-pdf-password): open a password-protected e-Aadhaar
+- [Self-attest documents](https://kaagazpdf.in/self-attest-documents): add signature, date and stamp
+- [Passport photo size (India)](https://kaagazpdf.in/passport-photo-size-india): exact 35x45 mm photo
+- [Resize photo & signature](https://kaagazpdf.in/resize-photo-signature-exam-form): SSC/UPSC/IBPS presets
+- [Reduce photo size in KB](https://kaagazpdf.in/reduce-photo-size-kb): hit 20/50/100 KB targets
+
+## Guides
+- [All how-to guides](https://kaagazpdf.in/guides)
+
+## About
+- [About KaagazPDF](https://kaagazpdf.in/about)
+- [Contact](https://kaagazpdf.in/contact)
