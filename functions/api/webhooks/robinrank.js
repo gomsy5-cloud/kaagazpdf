@@ -4,11 +4,6 @@
 // Once this file is pushed to the repo at that exact path, Cloudflare Pages
 // automatically serves it at:  https://kaagazpdf.in/api/webhooks/robinrank
 //
-// It receives the signed webhook from RobinRank, verifies it, turns the
-// article into a KaagazPDF-styled HTML guide page, and commits that new
-// file straight into the GitHub repo (which triggers a normal Cloudflare
-// Pages deploy, exactly like a manual upload would).
-//
 // Required environment variables (set in Cloudflare Pages → Settings →
 // Environment variables, as *encrypted* secrets):
 //
@@ -19,11 +14,30 @@
 //   GITHUB_REPO                -> "gomsy5-cloud/kaagazpdf"
 //   GITHUB_BRANCH               -> "main"  (optional, defaults to main)
 
+// TEMPORARY DIAGNOSTIC HANDLER.
+// Visit https://kaagazpdf.in/api/webhooks/robinrank directly in a browser
+// (a plain GET request) to see which environment variables are missing.
+// Safe to remove once everything is confirmed working.
+export async function onRequestGet({ env }) {
+  return new Response(
+    JSON.stringify(
+      {
+        GITHUB_TOKEN_present: !!env.GITHUB_TOKEN,
+        GITHUB_REPO: env.GITHUB_REPO || "(missing)",
+        GITHUB_BRANCH: env.GITHUB_BRANCH || "(missing, will default to main)",
+        ROBINRANK_WEBHOOK_SECRET_present: !!env.ROBINRANK_WEBHOOK_SECRET,
+      },
+      null,
+      2
+    ),
+    { headers: { "content-type": "application/json" } }
+  );
+}
+
 export async function onRequestPost({ request, env }) {
   try {
     const rawBody = await request.text();
 
-    // ---- 1. Verify the signature -----------------------------------
     const signatureHeader = request.headers.get("X-RobinRank-Signature") || "";
     const expected = await hmacSha256Hex(env.ROBINRANK_WEBHOOK_SECRET, rawBody);
 
@@ -31,20 +45,16 @@ export async function onRequestPost({ request, env }) {
       return new Response("Invalid signature", { status: 401 });
     }
 
-    // ---- 2. Parse payload --------------------------------------------
     const payload = JSON.parse(rawBody);
     if (payload.event !== "article.published") {
-      // Acknowledge anything we don't handle so RobinRank doesn't retry.
       return new Response("Ignored event", { status: 200 });
     }
 
     const article = payload.data.article;
 
-    // ---- 3. Build the HTML page ---------------------------------------
     const html = renderGuideHtml(article);
     const filePath = `${article.slug}.html`;
 
-    // ---- 4. Commit the file to GitHub ----------------------------------
     await commitFileToGitHub({
       env,
       path: filePath,
@@ -55,13 +65,9 @@ export async function onRequestPost({ request, env }) {
     return new Response("ok", { status: 200 });
   } catch (err) {
     console.error("RobinRank webhook error:", err);
-    return new Response("Server error", { status: 500 });
+    return new Response(`Server error: ${err.message}`, { status: 500 });
   }
 }
-
-// ---------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------
 
 async function hmacSha256Hex(secret, message) {
   const enc = new TextEncoder();
@@ -87,9 +93,6 @@ function timingSafeEqual(a, b) {
   return result === 0;
 }
 
-// Renders a guide page using the exact same header/nav/footer markup and
-// CSS variables as the existing KaagazPDF guide pages, so new posts look
-// identical to hand-built ones.
 function renderGuideHtml(article) {
   const title = escapeHtml(article.title);
   const metaDescription = escapeHtml(article.metaDescription || article.excerpt || "");
@@ -186,13 +189,11 @@ function escapeAttr(str = "") {
   return escapeHtml(str).replace(/"/g, "&quot;");
 }
 
-// Creates (or updates) a file in the GitHub repo using the Contents API.
 async function commitFileToGitHub({ env, path, content, message }) {
-  const repo = env.GITHUB_REPO; // e.g. "gomsy5-cloud/kaagazpdf"
+  const repo = env.GITHUB_REPO;
   const branch = env.GITHUB_BRANCH || "main";
   const apiUrl = `https://api.github.com/repos/${repo}/contents/${encodeURIComponent(path)}`;
 
-  // Check if the file already exists (needed to update instead of create)
   let sha;
   const existing = await fetch(`${apiUrl}?ref=${branch}`, {
     headers: {
@@ -231,8 +232,6 @@ async function commitFileToGitHub({ env, path, content, message }) {
 }
 
 function base64Encode(str) {
-  // Cloudflare Workers runtime supports TextEncoder + btoa, but btoa only
-  // handles latin1, so we go through UTF-8 bytes manually for safety.
   const bytes = new TextEncoder().encode(str);
   let binary = "";
   bytes.forEach((b) => (binary += String.fromCharCode(b)));
